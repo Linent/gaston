@@ -1,8 +1,24 @@
 import { useState } from "react";
-import { Input, Button, Select, SelectItem } from "@nextui-org/react";
+
+import { Link as Linking } from "react-router-dom";
+
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Link,
+  Input,
+  Button,
+  Select,
+  SelectItem,
+} from "@nextui-org/react";
+
+import { NavigateRoutes } from "../../../enums";
+import { PasswordInput } from "../../../components";
 
 export const RegisterPage = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const toggleVisibility = () => setIsVisible(!isVisible);
 
   const [isLoading, setIsLoading] = useState(false);
   const handleButtonClick = () => {
@@ -19,73 +35,57 @@ export const RegisterPage = () => {
       //   router.push('/dashboard');
     }, 3000);
   };
-  return (
-    <div className="w-full flex flex-col gap-4">
-      <div>
-        <h1>Registrar usuario</h1>
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
-        <Input
-          isRequired
-          size={"sm"}
-          type="text"
-          inputMode="text"
-          label="Usuario"
-        />
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-        <Input isRequired size={"sm"} type="text" label="Nombre completo" />
-      </div>
 
-      <div>
-        <Select
-          size={"sm"}
-          label="Seleccione un tipo de documento"
-          className="max-w-xs"
-        >
-          <SelectItem key="Cedula civil" value="Cedula Civil">
-            Cedula Civil
-          </SelectItem>
-        </Select>
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
-        <Input
-          isRequired
-          type="text"
-          inputMode="numeric"
-          label="Documento de identidad"
-        />
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-        <Input
-          size={"sm"}
-          isRequired
-          label="Contraseña"
-          variant="bordered"
-          type={isVisible ? "text" : "password"}
-          className="max-w-xs"
-        />
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-        <Input
-          size={"sm"}
-          isRequired
-          label="Confirmar Contraseña"
-          variant="bordered"
-          type={isVisible ? "text" : "password"}
-          className="max-w-xs"
-        />
-      </div>
-      <div>
-        <Button
-          id="login"
-          color="default"
-          onClick={handleButtonClick}
-          isLoading={isLoading}
-        >
-          Acceder
-        </Button>
-      </div>
+  return (
+    <div className="grid place-content-center min-h-screen">
+      <Card className="w-[420px] md:w-[500px] p-5">
+        <CardHeader>
+          <h1 className="text-3xl font-bold text-center w-full">
+            Registrar usuario
+          </h1>
+        </CardHeader>
+        <CardBody>
+          <form className="grid gap-4">
+            <Input isRequired type="text" label="Nombre completo" />
+            <Input isRequired label="Correo" />
+            <div className="flex max-md:flex-col gap-4">
+              <Select label="Tipo de documento" className="md:max-w-[170px]">
+                <SelectItem key="Cedula civil" value="Cedula Civil">
+                  Cedula Civil
+                </SelectItem>
+              </Select>
+
+              <Input
+                isRequired
+                type="text"
+                inputMode="numeric"
+                label="Documento de identidad"
+              />
+            </div>
+            <PasswordInput
+              label="Contraseña"
+              isVisible={isVisible}
+              toggleVisibility={toggleVisibility}
+            />
+            <PasswordInput
+              label="Confirmar contraseña"
+              isVisible={isVisible}
+              toggleVisibility={toggleVisibility}
+            />
+
+            <Button type="submit" className="h-12">
+              Acceder
+            </Button>
+
+            <div className="flex place-content-center gap-2">
+              ¿Ya tienes una cuenta?{" "}
+              <Link>
+                <Linking to={NavigateRoutes.LOGIN}>Inicia sesión</Linking>
+              </Link>
+            </div>
+          </form>
+        </CardBody>
+      </Card>
     </div>
   );
 };

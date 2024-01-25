@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import { Link as Linking } from "react-router-dom";
 
+import { useForm, SubmitHandler, RegisterOptions } from "react-hook-form";
+
 import {
   Card,
   Button,
@@ -10,15 +12,56 @@ import {
   CardBody,
   Link,
 } from "@nextui-org/react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import { NavigateRoutes } from "../../../enums";
+import { PasswordInput } from "../../../components";
+import { regex } from "../../../constants";
+
+enum FormKeys {
+  EMAIL = "email",
+  PASSWORD = "password",
+}
+
+type FormData = {
+  [FormKeys.EMAIL]: string;
+  [FormKeys.PASSWORD]: string;
+};
+
+interface Validator {
+  [FormKeys.EMAIL]: RegisterOptions<FormData, FormKeys.EMAIL>;
+  [FormKeys.PASSWORD]: RegisterOptions<FormData, FormKeys.PASSWORD>;
+}
+
+const validator: Validator = {
+  [FormKeys.EMAIL]: {
+    required: {message: 'El correo es obligatorio', value: true},
+    pattern: {
+      message: 'El correo no es válido',
+      value: regex.email
+    }
+  },
+  [FormKeys.PASSWORD]: {
+    minLength: {
+      message: 'Debe tener más de 8 caracteres',
+      value: 8
+    },
+    maxLength: {
+      message: 'Debe tener menos de 16 caracteres',
+      value: 16
+    },
+    pattern: {
+      message: 'Debe contener letras y símbolos',
+      value: regex.password
+    }
+  },
+};
 
 interface Props {}
 
 export const LoginPage: React.FC<Props> = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
+
   /*
   const [isLoading, setIsLoading] = useState(false);
   // const router = useRouter();
@@ -37,6 +80,21 @@ export const LoginPage: React.FC<Props> = () => {
     }, 3000);
   }; */
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
+
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    const { email, password } = data;
+    const userData = {
+      email: email.toLowerCase(),
+      password,
+    };
+    console.log(userData)
+  };
+
   return (
     <div className="grid place-content-center h-screen">
       <Card className="w-[420px] p-5">
@@ -44,25 +102,21 @@ export const LoginPage: React.FC<Props> = () => {
           <h1 className="text-3xl font-bold text-center w-full">Bienvenido</h1>
         </CardHeader>
         <CardBody>
-          <form className="grid gap-4">
-            <Input isRequired type="email" label="Email" />
+          <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
             <Input
-              label="Password"
               isRequired
-              endContent={
-                <button
-                  className="focus:outline-none self-center"
-                  type="button"
-                  onClick={toggleVisibility}
-                >
-                  {isVisible ? (
-                    <FaEyeSlash className="text-xl text-default-400 pointer-events-none" />
-                  ) : (
-                    <FaEye className="text-xl text-default-400 pointer-events-none" />
-                  )}
-                </button>
-              }
-              type={isVisible ? "text" : "password"}
+              type="email"
+              label="Correo"
+              errorMessage={errors[FormKeys.EMAIL]?.message}
+              {...register(FormKeys.EMAIL, validator[FormKeys.EMAIL])}
+            />
+
+            <PasswordInput
+              label="Contraseña"
+              isVisible={isVisible}
+              toggleVisibility={toggleVisibility}
+              errorMessage={errors[FormKeys.PASSWORD]?.message}
+              {...register(FormKeys.PASSWORD, validator[FormKeys.PASSWORD])}
             />
 
             <Button type="submit" className="h-12">
