@@ -15,9 +15,9 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "jsxImportSource": "react"
   },
   "esModuleInterop": true,
-  "jsxImportSource": "react",
   "include": ["src", "src/app/pages/platform/Platform.tsx", "*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,15 +1,12 @@
-import { Input } from "@nextui-org/react";
-import * as React from "react";
-import {Select, SelectItem} from "@nextui-org/react";
-import { Button } from "@nextui-org/react";
-export const Registro = () => {
-  const sizes = ["sm", "md", "lg"];
-  const [isVisible, setIsVisible] = React.useState(false);
+import { useState } from "react";
+import { Input, Button, Select, SelectItem } from "@nextui-org/react";
 
-  const [isLoading, setIsLoading] = React.useState(false);
+export const RegisterPage = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
   const handleButtonClick = () => {
-    const TipoDocumento: any = [
-      { value: "Cedula Civil" }]
+    //const TipoDocumento = [{ value: "Cedula Civil" }];
     // Cambia el estado de isLoading a true
     setIsLoading(true);
 
@@ -28,27 +25,40 @@ export const Registro = () => {
         <h1>Registrar usuario</h1>
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
-        <Input isRequired size={"sm"} type="text" inputMode="text" label="Usuario" />
+        <Input
+          isRequired
+          size={"sm"}
+          type="text"
+          inputMode="text"
+          label="Usuario"
+        />
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Input isRequired size={"sm"} type="text" label="Nombre completo" />
       </div>
-      
+
       <div>
-      <Select size={"sm"}
-        label="Seleccione un tipo de documento" 
-        className="max-w-xs" 
-      >
-          <SelectItem key='Cedula civil' value= 'Cedula Civil'>
+        <Select
+          size={"sm"}
+          label="Seleccione un tipo de documento"
+          className="max-w-xs"
+        >
+          <SelectItem key="Cedula civil" value="Cedula Civil">
             Cedula Civil
           </SelectItem>
-      </Select>
+        </Select>
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
-        <Input  isRequired type="text" inputMode="numeric" label="Documento de identidad" />
+        <Input
+          isRequired
+          type="text"
+          inputMode="numeric"
+          label="Documento de identidad"
+        />
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-        <Input size={"sm"}
+        <Input
+          size={"sm"}
           isRequired
           label="Contraseña"
           variant="bordered"
@@ -57,7 +67,8 @@ export const Registro = () => {
         />
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-        <Input size={"sm"}
+        <Input
+          size={"sm"}
           isRequired
           label="Confirmar Contraseña"
           variant="bordered"
