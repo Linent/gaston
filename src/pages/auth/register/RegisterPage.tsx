@@ -47,7 +47,7 @@ export const RegisterPage = () => {
         <CardBody>
           <form className="grid gap-4">
             <Input isRequired type="text" label="Nombre completo" />
-            <Input isRequired label="Correo" />
+            <Input isRequired label="Usuario" />
             <div className="flex max-md:flex-col gap-4">
               <Select label="Tipo de documento" className="md:max-w-[170px]">
                 <SelectItem key="Cedula civil" value="Cedula Civil">

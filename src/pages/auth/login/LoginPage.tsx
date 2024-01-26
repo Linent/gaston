@@ -18,27 +18,24 @@ import { PasswordInput } from "../../../components";
 import { regex } from "../../../constants";
 
 enum FormKeys {
-  EMAIL = "email",
+  USUARIO = "usuario",
   PASSWORD = "password",
 }
 
 type FormData = {
-  [FormKeys.EMAIL]: string;
+  [FormKeys.USUARIO]: string;
   [FormKeys.PASSWORD]: string;
 };
 
 interface Validator {
-  [FormKeys.EMAIL]: RegisterOptions<FormData, FormKeys.EMAIL>;
+  [FormKeys.USUARIO]: RegisterOptions<FormData, FormKeys.USUARIO>;
   [FormKeys.PASSWORD]: RegisterOptions<FormData, FormKeys.PASSWORD>;
 }
 
 const validator: Validator = {
-  [FormKeys.EMAIL]: {
-    required: {message: 'El correo es obligatorio', value: true},
-    pattern: {
-      message: 'El correo no es válido',
-      value: regex.email
-    }
+  [FormKeys.USUARIO]: {
+    required: {message: 'El usuario es obligatorio', value: true},
+   
   },
   [FormKeys.PASSWORD]: {
     minLength: {
@@ -87,9 +84,9 @@ export const LoginPage: React.FC<Props> = () => {
   } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    const { email, password } = data;
+    const { usuario, password } = data;
     const userData = {
-      email: email.toLowerCase(),
+      usuario,
       password,
     };
     console.log(userData)
@@ -105,10 +102,9 @@ export const LoginPage: React.FC<Props> = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
             <Input
               isRequired
-              type="email"
-              label="Correo"
-              errorMessage={errors[FormKeys.EMAIL]?.message}
-              {...register(FormKeys.EMAIL, validator[FormKeys.EMAIL])}
+              label="Usuario"
+              errorMessage={errors[FormKeys.USUARIO]?.message}
+              {...register(FormKeys.USUARIO, validator[FormKeys.USUARIO])}
             />
 
             <PasswordInput
