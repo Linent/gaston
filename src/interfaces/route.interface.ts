@@ -1,16 +1,16 @@
 import { Modules, Pages } from "../enums";
 
-export interface IRoutes {
+export interface IRoute {
   isActive: boolean;
   showInSidebar: boolean;
   module: Modules;
   childrenRoutes?: IChildrenRoute[];
-  Component?: any;
+  Component?: React.ReactNode;
 }
 
 export interface IChildrenRoute {
   isActive: boolean;
   showInSidebar: boolean;
   name: Pages;
-  Component: any;
+  Component: React.ReactNode;
 }

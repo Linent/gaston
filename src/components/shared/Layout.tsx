@@ -1,7 +1,5 @@
-import { Outlet } from 'react-router';
+import { Outlet } from "react-router";
 
- export const Layout: React.FC = () => {
-  return (
-    <div>{<Outlet />}</div>
-  )
-}
+export const Layout: React.FC = () => {
+  return <div>{<Outlet />}</div>;
+};
