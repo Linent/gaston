@@ -3,7 +3,7 @@ import * as React from "react";
 
 import { Button } from "@nextui-org/react";
 import { Link } from "react-router-dom";
-import { NavigateRoutes } from "../../enums";
+//import { NavigateRoutes } from "../../enums";
 //import { useRouter } from 'next/router';
 
 interface Props {
