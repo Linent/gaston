@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+// eslint-disable-next-line no-undef
 const {nextui} = require("@nextui-org/react");
 
 /** @type {import('tailwindcss').Config} */
@@ -9,7 +11,11 @@ export default {
   ],
 
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        /* dark: "#010001" */
+      }
+    },
   },
   darkMode: "class",
   plugins: [nextui()],

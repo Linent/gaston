@@ -1,1 +1,1 @@
-export * from './Routes.Interfaces';
+export * from './route.interface';

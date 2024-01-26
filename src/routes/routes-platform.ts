@@ -1,8 +1,7 @@
-import { Modules, Pages } from "../enums";
-import { IRoutes } from "../interfaces";
+import { IRoute } from "../interfaces";
+import { Modules } from "../enums";
 
-
-const DASHBOARD: IRoutes = {
+const DASHBOARD: IRoute = {
 	isActive: true,
 	module: Modules.DASHBOARD,
 	showInSidebar: true,
@@ -23,6 +22,6 @@ const DASHBOARD: IRoutes = {
 	],
 }; */
 
-export const PLATFORM_ROUTES: IRoutes[] = [
+export const PLATFORM_ROUTES: IRoute[] = [
 	DASHBOARD,
 ];
