@@ -8,6 +8,8 @@ import { NavigateRoutes, StorageKeys } from "../../../enums";
 import { Link, PasswordInput } from "../../../components";
 import { regex } from "../../../constants";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { tokenService } from "../../../services";
 
 enum FormKeys {
   USUARIO = "usuario",
@@ -30,8 +32,8 @@ const validator: Validator = {
   },
   [FormKeys.PASSWORD]: {
     minLength: {
-      message: "Debe tener más de 8 caracteres",
-      value: 8,
+      message: "Debe tener más de 3 caracteres",
+      value: 3,
     },
     maxLength: {
       message: "Debe tener menos de 16 caracteres",
@@ -47,29 +49,10 @@ const validator: Validator = {
 interface Props {}
 
 export const LoginPage: React.FC<Props> = () => {
-
-const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
-
-  /*
-  const [isLoading, setIsLoading] = useState(false);
-  // const router = useRouter();
-
-  const handleButtonClick = () => {
-    // Cambia el estado de isLoading a true
-    setIsLoading(true);
-
-    // Después de 3 segundos, realiza la redirección al dashboard
-    setTimeout(() => {
-      // Cambia el estado de isLoading a false antes de la redirección (puedes ajustar según tus necesidades)
-      setIsLoading(false);
-
-      // Realiza la redirección al dashboard
-      //   router.push('/dashboard');
-    }, 3000);
-  }; */
 
   const {
     register,
@@ -78,13 +61,15 @@ const navigate = useNavigate()
   } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    const { usuario, password } = data;
-    const userData = {
-      usuario,
-      password,
-    };
-    localStorage.setItem(StorageKeys.TOKEN, "a")
-    navigate(NavigateRoutes.DASHBOARD)
+    try {
+      const response: any = await tokenService.login(data);
+      const {token} = response?.data;
+      toast.success('Sesión iniciada correctamente')
+      localStorage.setItem(StorageKeys.TOKEN, token);
+      navigate(NavigateRoutes.DASHBOARD);
+    } catch (error: any) {
+      toast.error(error?.message ?? 'Ha ocurrido un error');
+    }
   };
 
   return (

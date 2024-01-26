@@ -1,3 +1,3 @@
 export enum Info {
-  APP_TITLE = 'GASTON'
+  APP_TITLE = 'BakeFlow'
 }
