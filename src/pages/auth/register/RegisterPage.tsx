@@ -1,20 +1,18 @@
 import { useState } from "react";
 
-import { Link as Linking } from "react-router-dom";
-
 import {
   Card,
   CardHeader,
   CardBody,
-  Link,
   Input,
   Button,
   Select,
   SelectItem,
 } from "@nextui-org/react";
 
+import { Link, PasswordInput } from "../../../components";
+
 import { NavigateRoutes } from "../../../enums";
-import { PasswordInput } from "../../../components";
 
 export const RegisterPage = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -79,9 +77,7 @@ export const RegisterPage = () => {
 
             <div className="flex place-content-center gap-2">
               ¿Ya tienes una cuenta?{" "}
-              <Link>
-                <Linking to={NavigateRoutes.LOGIN}>Inicia sesión</Linking>
-              </Link>
+              <Link to={NavigateRoutes.LOGIN}>Iniciar sesión</Link>
             </div>
           </form>
         </CardBody>

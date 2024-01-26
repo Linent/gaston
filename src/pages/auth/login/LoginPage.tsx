@@ -1,20 +1,11 @@
 import { useState } from "react";
 
-import { Link as Linking } from "react-router-dom";
-
 import { useForm, SubmitHandler, RegisterOptions } from "react-hook-form";
 
-import {
-  Card,
-  Button,
-  Input,
-  CardHeader,
-  CardBody,
-  Link,
-} from "@nextui-org/react";
+import { Card, Button, Input, CardHeader, CardBody } from "@nextui-org/react";
 
 import { NavigateRoutes } from "../../../enums";
-import { PasswordInput } from "../../../components";
+import { Link, PasswordInput } from "../../../components";
 import { regex } from "../../../constants";
 
 enum FormKeys {
@@ -34,22 +25,21 @@ interface Validator {
 
 const validator: Validator = {
   [FormKeys.USUARIO]: {
-    required: {message: 'El usuario es obligatorio', value: true},
-   
+    required: { message: "El usuario es obligatorio", value: true },
   },
   [FormKeys.PASSWORD]: {
     minLength: {
-      message: 'Debe tener más de 8 caracteres',
-      value: 8
+      message: "Debe tener más de 8 caracteres",
+      value: 8,
     },
     maxLength: {
-      message: 'Debe tener menos de 16 caracteres',
-      value: 16
+      message: "Debe tener menos de 16 caracteres",
+      value: 16,
     },
     pattern: {
-      message: 'Debe contener letras y símbolos',
-      value: regex.password
-    }
+      message: "Debe contener letras y símbolos",
+      value: regex.password,
+    },
   },
 };
 
@@ -89,7 +79,7 @@ export const LoginPage: React.FC<Props> = () => {
       usuario,
       password,
     };
-    console.log(userData)
+    console.log(userData);
   };
 
   return (
@@ -112,7 +102,10 @@ export const LoginPage: React.FC<Props> = () => {
               isVisible={isVisible}
               toggleVisibility={toggleVisibility}
               errorMessage={errors[FormKeys.PASSWORD]?.message}
-              {...register(FormKeys.PASSWORD, validator[FormKeys.PASSWORD])}
+              register={register(
+                FormKeys.PASSWORD,
+                validator[FormKeys.PASSWORD]
+              )}
             />
 
             <Button type="submit" className="h-12">
@@ -121,9 +114,7 @@ export const LoginPage: React.FC<Props> = () => {
 
             <div className="flex place-content-center gap-2">
               ¿No tienes una cuenta?{" "}
-              <Link>
-                <Linking to={NavigateRoutes.REGISTER}>Crea una</Linking>
-              </Link>
+              <Link to={NavigateRoutes.REGISTER}>Crea una</Link>
             </div>
           </form>
         </CardBody>
