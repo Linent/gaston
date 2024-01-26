@@ -5,11 +5,13 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 interface Props extends InputProps {
   toggleVisibility: () => void;
   isVisible: boolean;
+  register?: any;
 }
 
 export const PasswordInput: React.FC<Props> = ({
   toggleVisibility,
   isVisible,
+  register = {},
   ...props
 }) => {
   return (
@@ -29,6 +31,7 @@ export const PasswordInput: React.FC<Props> = ({
         </button>
       }
       type={isVisible ? "text" : "password"}
+      {...register}
       {...props}
     />
   );

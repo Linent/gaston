@@ -1,27 +1,33 @@
+import { FaShoppingBasket } from "react-icons/fa";
+
+import { ProductsManagePage, Dashboard} from "../pages";
+
 import { IRoute } from "../interfaces";
-import { Modules } from "../enums";
+import { Modules, Pages } from "../enums";
 
 const DASHBOARD: IRoute = {
-	isActive: true,
-	module: Modules.DASHBOARD,
-	showInSidebar: true,
-	Component: '',
+  isActive: true,
+  module: Modules.DASHBOARD,
+  showInSidebar: true,
+  Component: Dashboard,
+	label: "Dashboard",
 };
 
-/* const ROLES = {
-	isActive: false,
-	module: Modules.ROLES,
-	showInSidebar: false,
-	childrenRoutes: [
-		{
-			isActive: true,
-			showInSidebar: true,
-			name: Pages.CREATE_ROLE_ADMIN,
-			Component: CreateRoleAdmin,
-		},
-	],
-}; */
+const PRODUCTS: IRoute = {
+  isActive: false,
+  module: Modules.PRODUCTS,
+  showInSidebar: false,
+	label: "Productos",
+  icon: FaShoppingBasket,
+  childrenRoutes: [
+    {
+      isActive: true,
+      showInSidebar: true,
+      name: Pages.MANAGE_PRODUCTS,
+      Component: '',
+			label: "Manejar productos",
+    },
+  ],
+};
 
-export const PLATFORM_ROUTES: IRoute[] = [
-	DASHBOARD,
-];
+export const PLATFORM_ROUTES: IRoute[] = [DASHBOARD, PRODUCTS];

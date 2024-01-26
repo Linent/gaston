@@ -1,20 +1,18 @@
 import { useState } from "react";
 
-import { Link as Linking } from "react-router-dom";
-
 import {
   Card,
   CardHeader,
   CardBody,
-  Link,
   Input,
   Button,
   Select,
   SelectItem,
 } from "@nextui-org/react";
 
+import { Link, PasswordInput } from "../../../components";
+
 import { NavigateRoutes } from "../../../enums";
-import { PasswordInput } from "../../../components";
 
 export const RegisterPage = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -47,7 +45,7 @@ export const RegisterPage = () => {
         <CardBody>
           <form className="grid gap-4">
             <Input isRequired type="text" label="Nombre completo" />
-            <Input isRequired label="Correo" />
+            <Input isRequired label="Usuario" />
             <div className="flex max-md:flex-col gap-4">
               <Select label="Tipo de documento" className="md:max-w-[170px]">
                 <SelectItem key="Cedula civil" value="Cedula Civil">
@@ -79,9 +77,7 @@ export const RegisterPage = () => {
 
             <div className="flex place-content-center gap-2">
               ¿Ya tienes una cuenta?{" "}
-              <Link>
-                <Linking to={NavigateRoutes.LOGIN}>Inicia sesión</Linking>
-              </Link>
+              <Link to={NavigateRoutes.LOGIN}>Iniciar sesión</Link>
             </div>
           </form>
         </CardBody>

@@ -5,12 +5,15 @@ export interface IRoute {
   showInSidebar: boolean;
   module: Modules;
   childrenRoutes?: IChildrenRoute[];
-  Component?: React.ReactNode;
+  Component?: any;
+  label: string;
+  icon?: any
 }
 
 export interface IChildrenRoute {
   isActive: boolean;
   showInSidebar: boolean;
   name: Pages;
-  Component: React.ReactNode;
+  Component: any;
+  label: string;
 }

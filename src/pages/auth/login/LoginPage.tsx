@@ -1,84 +1,58 @@
 import { useState } from "react";
 
-import { Link as Linking } from "react-router-dom";
-
 import { useForm, SubmitHandler, RegisterOptions } from "react-hook-form";
 
-import {
-  Card,
-  Button,
-  Input,
-  CardHeader,
-  CardBody,
-  Link,
-} from "@nextui-org/react";
+import { Card, Button, Input, CardHeader, CardBody } from "@nextui-org/react";
 
-import { NavigateRoutes } from "../../../enums";
-import { PasswordInput } from "../../../components";
+import { NavigateRoutes, StorageKeys } from "../../../enums";
+import { Link, PasswordInput } from "../../../components";
 import { regex } from "../../../constants";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { tokenService } from "../../../services";
 
 enum FormKeys {
-  EMAIL = "email",
+  USUARIO = "usuario",
   PASSWORD = "password",
 }
 
 type FormData = {
-  [FormKeys.EMAIL]: string;
+  [FormKeys.USUARIO]: string;
   [FormKeys.PASSWORD]: string;
 };
 
 interface Validator {
-  [FormKeys.EMAIL]: RegisterOptions<FormData, FormKeys.EMAIL>;
+  [FormKeys.USUARIO]: RegisterOptions<FormData, FormKeys.USUARIO>;
   [FormKeys.PASSWORD]: RegisterOptions<FormData, FormKeys.PASSWORD>;
 }
 
 const validator: Validator = {
-  [FormKeys.EMAIL]: {
-    required: {message: 'El correo es obligatorio', value: true},
-    pattern: {
-      message: 'El correo no es válido',
-      value: regex.email
-    }
+  [FormKeys.USUARIO]: {
+    required: { message: "El usuario es obligatorio", value: true },
   },
   [FormKeys.PASSWORD]: {
     minLength: {
-      message: 'Debe tener más de 8 caracteres',
-      value: 8
+      message: "Debe tener más de 3 caracteres",
+      value: 3,
     },
     maxLength: {
-      message: 'Debe tener menos de 16 caracteres',
-      value: 16
+      message: "Debe tener menos de 16 caracteres",
+      value: 16,
     },
     pattern: {
-      message: 'Debe contener letras y símbolos',
-      value: regex.password
-    }
+      message: "Debe contener letras y símbolos",
+      value: regex.password,
+    },
   },
 };
 
 interface Props {}
 
 export const LoginPage: React.FC<Props> = () => {
+  const navigate = useNavigate();
+
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
-
-  /*
-  const [isLoading, setIsLoading] = useState(false);
-  // const router = useRouter();
-
-  const handleButtonClick = () => {
-    // Cambia el estado de isLoading a true
-    setIsLoading(true);
-
-    // Después de 3 segundos, realiza la redirección al dashboard
-    setTimeout(() => {
-      // Cambia el estado de isLoading a false antes de la redirección (puedes ajustar según tus necesidades)
-      setIsLoading(false);
-
-      // Realiza la redirección al dashboard
-      //   router.push('/dashboard');
-    }, 3000);
-  }; */
 
   const {
     register,
@@ -87,12 +61,15 @@ export const LoginPage: React.FC<Props> = () => {
   } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    const { email, password } = data;
-    const userData = {
-      email: email.toLowerCase(),
-      password,
-    };
-    console.log(userData)
+    try {
+      const response: any = await tokenService.login(data);
+      const {token} = response?.data;
+      toast.success('Sesión iniciada correctamente')
+      localStorage.setItem(StorageKeys.TOKEN, token);
+      navigate(NavigateRoutes.DASHBOARD);
+    } catch (error: any) {
+      toast.error(error?.message ?? 'Ha ocurrido un error');
+    }
   };
 
   return (
@@ -105,10 +82,9 @@ export const LoginPage: React.FC<Props> = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
             <Input
               isRequired
-              type="email"
-              label="Correo"
-              errorMessage={errors[FormKeys.EMAIL]?.message}
-              {...register(FormKeys.EMAIL, validator[FormKeys.EMAIL])}
+              label="Usuario"
+              errorMessage={errors[FormKeys.USUARIO]?.message}
+              {...register(FormKeys.USUARIO, validator[FormKeys.USUARIO])}
             />
 
             <PasswordInput
@@ -116,7 +92,10 @@ export const LoginPage: React.FC<Props> = () => {
               isVisible={isVisible}
               toggleVisibility={toggleVisibility}
               errorMessage={errors[FormKeys.PASSWORD]?.message}
-              {...register(FormKeys.PASSWORD, validator[FormKeys.PASSWORD])}
+              register={register(
+                FormKeys.PASSWORD,
+                validator[FormKeys.PASSWORD]
+              )}
             />
 
             <Button type="submit" className="h-12">
@@ -125,9 +104,7 @@ export const LoginPage: React.FC<Props> = () => {
 
             <div className="flex place-content-center gap-2">
               ¿No tienes una cuenta?{" "}
-              <Link>
-                <Linking to={NavigateRoutes.REGISTER}>Crea una</Linking>
-              </Link>
+              <Link to={NavigateRoutes.REGISTER}>Crea una</Link>
             </div>
           </form>
         </CardBody>

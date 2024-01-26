@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 import { LoginPage, RegisterPage } from "./pages";
 import { generateRoutes, PLATFORM_ROUTES, ProtectedRoutes } from "./routes";
@@ -12,9 +13,13 @@ import { Modules, NavigateRoutes, Pages } from "./enums";
 import "./App.css";
 
 function App() {
-
   return (
     <StoreProvider>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        containerClassName="overflow-auto"
+      />
       <BrowserRouter>
         <Routes>
           {/* Rutas Fuera de la plataforma */}
