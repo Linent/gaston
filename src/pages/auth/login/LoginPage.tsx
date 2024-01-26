@@ -4,9 +4,10 @@ import { useForm, SubmitHandler, RegisterOptions } from "react-hook-form";
 
 import { Card, Button, Input, CardHeader, CardBody } from "@nextui-org/react";
 
-import { NavigateRoutes } from "../../../enums";
+import { NavigateRoutes, StorageKeys } from "../../../enums";
 import { Link, PasswordInput } from "../../../components";
 import { regex } from "../../../constants";
+import { useNavigate } from "react-router-dom";
 
 enum FormKeys {
   USUARIO = "usuario",
@@ -46,6 +47,9 @@ const validator: Validator = {
 interface Props {}
 
 export const LoginPage: React.FC<Props> = () => {
+
+const navigate = useNavigate()
+
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -79,7 +83,8 @@ export const LoginPage: React.FC<Props> = () => {
       usuario,
       password,
     };
-    console.log(userData);
+    localStorage.setItem(StorageKeys.TOKEN, "a")
+    navigate(NavigateRoutes.DASHBOARD)
   };
 
   return (

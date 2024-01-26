@@ -1,5 +1,7 @@
 export enum Pages {
     //* Auth
-    REGISTER = 'registro',
+    REGISTER = 'register',
     LOGIN = 'login',
+    //* Products
+    MANAGE_PRODUCTS = 'manage'
   }
