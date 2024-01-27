@@ -15,18 +15,18 @@ const columns = [
     label: "Nombre del producto",
   },
   {
+    key:'descripción',
+    label:'Descripción'
+  }
+  ,
+  {
     key: "existencias",
     label: "Cantidad",
   },
   {
     key: "precio",
-    label: "precio",
+    label: "Precio",
   },
-  {
-    key: "existencias",
-    
-    label: "Existencias"
-  }
 ];
 interface ProductoProps {
   id: number;
@@ -39,17 +39,18 @@ interface ProductoProps {
   costoUnitario: null;
   costoTotal: null;
 }
-const Producto: React.FC<ProductoProps> = ({ nombre, precio, existencias }) => (
+const Producto: React.FC<ProductoProps> = ({ nombre, precio, existencias, descripcion }) => (
   <TableRow>
     <TableCell>{nombre}</TableCell>
-    <TableCell>${precio}</TableCell>
+    <TableCell>{descripcion}</TableCell>
+    <TableCell>{precio}</TableCell>
     <TableCell>{existencias}</TableCell>
   </TableRow>
 );
 const data: ProductoProps[] = [
   {
     id: 6,
-    nombre: "Producto 1",
+    nombre: "Pan de jamon y queso",
     descripcion: "Descripcion 1",
     precio: 1000,
     existencias: 10,
@@ -84,8 +85,10 @@ const data: ProductoProps[] = [
 
 export const ProductsManagePage: React.FC = () => {
   return (
-    <div>
-      <h1>ProductsPage</h1>
+    <div className="p-4">
+      <div className='p-10'>
+      <h1>Todos los producto</h1>
+      </div>
       <div>
         <Table aria-label="Example static collection table">
           <TableHeader columns={columns}>
