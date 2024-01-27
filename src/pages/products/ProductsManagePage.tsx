@@ -13,9 +13,11 @@ import {
   Tooltip,
 } from "@nextui-org/react";
 
-import { CreateProductModal,EditIcon,DeleteIcon, EyeIcon } from "./components";
+import { CreateProductModal } from "./components";
 import { IProduct } from "../../interfaces";
 import { useGetProducts } from "../../hooks";
+import { Icon } from "@iconify/react";
+import { Icons } from "../../enums";
 
 const columns = [
   {
@@ -23,10 +25,9 @@ const columns = [
     label: "Nombre del producto",
   },
   {
-    key:'descripcion',
-    label:'Descripción'
-  }
-  ,
+    key: "descripcion",
+    label: "Descripción",
+  },
   {
     key: "existencias",
     label: "Cantidad disponibles",
@@ -36,41 +37,11 @@ const columns = [
     label: "Precio",
   },
   {
-    key: "ACTIONS", 
-    label: "actions"
+    key: "id",
+    label: "Acciones",
   },
 ];
 
-const Producto: React.FC<IProduct> = ({
-  nombre,
-  precio,
-  existencias,
-  descripcion,
-}) => (
-  <TableRow>
-    <TableCell>{nombre}</TableCell>
-    <TableCell>{descripcion}</TableCell>
-    <TableCell>{precio}</TableCell>
-    <TableCell>{existencias}</TableCell>
-    <TableCell className="relative flex items-center gap-2">
-            <Tooltip content="Details">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EyeIcon />
-              </span>
-            </Tooltip>
-            <Tooltip content="Edit user">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EditIcon />
-              </span>
-            </Tooltip>
-            <Tooltip color="danger" content="Delete user">
-              <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteIcon />
-              </span>
-            </Tooltip>
-    </TableCell>
-  </TableRow>
-);
 const data: IProduct[] = [
   {
     id: 6,
@@ -110,8 +81,38 @@ const data: IProduct[] = [
 export const ProductsManagePage: React.FC = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-
   const {} = useGetProducts();
+
+  const renderCell = React.useCallback((product: any, columnKey: any) => {
+    const cellValue = product[columnKey];
+    switch (columnKey) {
+      case "id":
+        return (
+          <div className="relative flex items-center gap-2">
+            <Tooltip content="Details">
+              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                <Icon icon={Icons.SHOW} />
+              </span>
+            </Tooltip>
+            <Tooltip content="Edit user">
+              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                <Icon icon={Icons.EDIT} />
+              </span>
+            </Tooltip>
+            <Tooltip color="danger" content="Delete user">
+              <span>
+                <Icon
+                  icon={Icons.DELETE}
+                  className="text-lg text-danger cursor-pointer active:opacity-50"
+                />
+              </span>
+            </Tooltip>
+          </div>
+        );
+      default:
+        return cellValue;
+    }
+  }, []);
 
   return (
     <>
@@ -129,14 +130,14 @@ export const ProductsManagePage: React.FC = () => {
                 <TableColumn key={column.key}>{column.label}</TableColumn>
               )}
             </TableHeader>
-            <TableBody>
-              {data.map((row) => (
-                <TableRow key={row.id}>
+            <TableBody items={data}>
+              {(item) => (
+                <TableRow key={item.id}>
                   {(columnKey) => (
-                    <TableCell>{getKeyValue(row, columnKey)}</TableCell>
+                    <TableCell>{renderCell(item, columnKey)}</TableCell>
                   )}
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </div>

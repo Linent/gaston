@@ -1,3 +1,4 @@
+export * from './icons.enum';
 export * from './info.enum';
 export * from './modules.enum';
 export * from './navigate-routes.enum';

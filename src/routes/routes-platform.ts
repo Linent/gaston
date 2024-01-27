@@ -1,5 +1,5 @@
 import { IRoute } from "../interfaces";
-import { Modules, Pages } from "../enums";
+import { Icons, Modules, Pages } from "../enums";
 
 const DASHBOARD: IRoute = {
   isActive: true,
@@ -13,7 +13,7 @@ const PRODUCTS: IRoute = {
   module: Modules.PRODUCTS,
   showInSidebar: false,
 	label: "Productos",
-  icon: "material-symbols:shopping-basket-sharp",
+  icon: Icons.PRODUCT,
   childrenRoutes: [
     {
       isActive: true,
