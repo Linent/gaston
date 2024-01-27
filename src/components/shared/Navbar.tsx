@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import {
   Accordion,
   AccordionItem,
@@ -26,23 +28,28 @@ const menuItems = [{ name: "Cerrar Sesión", path: NavigateRoutes.LOGIN }];
 export const Navbar: React.FC = () => {
   const navigate = useNavigate();
 
+  const [navbarIsOpen, setNavbarIsOpen] = useState(false);
+  const toggleNavbarIsOpen = () => setNavbarIsOpen(!navbarIsOpen)
+
   const location = useLocation();
   const { pathname } = location;
 
   const handleCloseSession = () => {
+    setNavbarIsOpen(false);
     localStorage.removeItem(StorageKeys.TOKEN);
     return navigate(NavigateRoutes.LOGIN);
   };
 
   const handleNavigate = (path: string) => {
+    setNavbarIsOpen(false);
     if (path === NavigateRoutes.LOGIN) return handleCloseSession();
     return navigate(path);
   };
 
   return (
-    <NextUiNavbar disableAnimation isBordered>
-      <NavbarContent className="sm:hidden" justify="start">
-        <NavbarMenuToggle />
+    <NextUiNavbar isMenuOpen={navbarIsOpen} isBordered>
+      <NavbarContent justify="start">
+        <NavbarMenuToggle onClick={toggleNavbarIsOpen} />
       </NavbarContent>
 
       <NavbarContent className="sm:hidden pr-3" justify="center">
@@ -55,18 +62,8 @@ export const Navbar: React.FC = () => {
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarBrand>
           {/*   <AcmeLogo /> */}
-          <p className="font-bold text-inherit">Gastón</p>
+          <p className="font-bold text-inherit">{Info.APP_TITLE}</p>
         </NavbarBrand>
-        {navItems.map(({ path, name }, index) => {
-          const isActive = path === pathname;
-          return (
-            <NavbarItem key={path} isActive={isActive}>
-              <Link color={isActive ? "primary" : "foreground"} href={path}>
-                {name}
-              </Link>
-            </NavbarItem>
-          );
-        })}
       </NavbarContent>
 
       <NavbarContent justify="end">
@@ -86,10 +83,10 @@ export const Navbar: React.FC = () => {
       <NavbarMenu>
         <Accordion variant="splitted">
           {PLATFORM_ROUTES.filter((e) => e.childrenRoutes).map(
-            ({ module, label, childrenRoutes, icon }) => {
+            ({ module, label, childrenRoutes }) => {
               return (
                 <AccordionItem
-                  startContent={icon}
+                  startContent={""}
                   key={module}
                   aria-label={module}
                   title={label}

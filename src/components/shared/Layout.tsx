@@ -4,7 +4,7 @@ import { Navbar } from "./Navbar";
 export const Layout: React.FC = () => {
   return (
     <div>
-      {/* <Navbar /> */}
+       <Navbar /> 
       {<Outlet />}
     </div>
   );
