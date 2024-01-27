@@ -2,9 +2,11 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import {
+  CreateMovementsPage,
   Dashboard,
   LoginPage,
   MovementsManagePage,
+  ProductByIdPage,
   ProductsManagePage,
   RegisterPage,
 } from "./pages";
@@ -43,11 +45,19 @@ function App() {
                   path={Pages.MANAGE_PRODUCTS}
                   element={<ProductsManagePage />}
                 />
+                 <Route
+                  path={Pages.PRODUCT_BY_ID}
+                  element={<ProductByIdPage />}
+                />
               </Route>
               <Route path={Modules.MOVEMENTS}>
                 <Route
                   path={Pages.MANAGE_MOVEMENTS}
                   element={<MovementsManagePage />}
+                />
+                 <Route
+                  path={Pages.CREATE_MOVEMENT}
+                  element={<CreateMovementsPage />}
                 />
               </Route>
             </Route>

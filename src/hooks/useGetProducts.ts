@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { IProduct } from "../interfaces";
 import toast from "react-hot-toast";
-import { productService } from "../services";
+import { generalService } from "../services";
 
 export const useGetProducts = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -12,7 +12,7 @@ export const useGetProducts = () => {
     setIsLoading(true);
     setError(null)
     try {
-      const response = await productService.getProducts();
+      const response = await generalService.getProducts();
       setProducts(response?.data)
     } catch (error: any) {
       if(error?.status === 403) {

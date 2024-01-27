@@ -4,4 +4,6 @@ export enum Icons {
   SHOW = "ic:outline-remove-red-eye",
   PRODUCT = "material-symbols:shopping-basket-sharp",
   MOVEMENT = "icon-park-outline:buy",
+  SEARCH = "material-symbols:search",
+  CHEVRON_DOWN = "material-symbols:keyboard-arrow-down",
 }

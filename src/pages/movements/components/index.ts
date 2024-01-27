@@ -1,1 +1,1 @@
-export * from './CreateMovementsModal';
+export * from '../CreateMovementPage';

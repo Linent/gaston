@@ -3,17 +3,17 @@ import { IProduct } from "../interfaces";
 import toast from "react-hot-toast";
 import { generalService } from "../services";
 
-export const useGetMovements = () => {
-  const [products, setProducts] = useState<IProduct[]>([]);
+export const useGetProductById = (id: string) => {
+  const [product, setProduct] = useState<IProduct | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const getProducts = async () => {
+  const getProductById = async () => {
     setIsLoading(true);
     setError(null)
     try {
-      const response = await generalService.getMovements();
-      setProducts(response?.data)
+      const response = await generalService.getProductById(id);
+      setProduct(response?.data)
     } catch (error: any) {
       if(error?.status === 403) {
         setError("No estás autenticado")
@@ -28,14 +28,14 @@ export const useGetMovements = () => {
 
 
   useEffect(() => {
-    getProducts();
+    getProductById();
   }, [])
   
 
   return {
-    products,
+    product,
     isLoading,
     error,
-    getProducts
+    getProductById
   }
 };
