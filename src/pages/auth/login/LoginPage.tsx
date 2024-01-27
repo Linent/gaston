@@ -9,7 +9,7 @@ import { Link, PasswordInput } from "../../../components";
 import { regex } from "../../../constants";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { tokenService } from "../../../services";
+import { generalService } from "../../../services";
 
 enum FormKeys {
   USUARIO = "usuario",
@@ -62,7 +62,7 @@ export const LoginPage: React.FC<Props> = () => {
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
-      const response: any = await tokenService.login(data);
+      const response: any = await generalService.login(data);
       const {token} = response?.data;
       toast.success('Sesión iniciada correctamente')
       localStorage.setItem(StorageKeys.TOKEN, token);

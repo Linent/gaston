@@ -1,15 +1,27 @@
-import { Button, Divider, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip, useDisclosure } from "@nextui-org/react";
-import { CreateMovementsModal } from "./components";
+import {
+  Button,
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  Tooltip,
+  useDisclosure,
+} from "@nextui-org/react";
+import { CreateMovementsPage } from "./CreateMovementPage";
 //import { useGetMovements } from "../../hooks";
 import { Icon } from "@iconify/react";
-import { Icons } from "../../enums";
+import { Icons, NavigateRoutes } from "../../enums";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 /*const {products,
   isLoading,
   error,
   getProducts } = useGetMovements();
 */
-  const columns = [
+const columns = [
   {
     key: "id",
     label: "Número de factura",
@@ -17,61 +29,62 @@ import React from "react";
   {
     key: "productos",
     label: "productos",
-  }
+  },
 ];
 const movimientos = [
   {
-    "cantidad": 10,
-    "costoTotal": 15000.0,
-    "costoUnitario":null,
-    "productoId": 1
+    cantidad: 10,
+    costoTotal: 15000.0,
+    costoUnitario: null,
+    productoId: 1,
   },
   {
-    "cantidad": 5,
-    "costoTotal": null,
-    "costoUnitario": 1500.0,
-    "productoId": 2
-  }
-]
-
+    cantidad: 5,
+    costoTotal: null,
+    costoUnitario: 1500.0,
+    productoId: 2,
+  },
+];
 
 export const MovementsManagePage: React.FC = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const navigate = useNavigate();
+
+  const handleNavigateCreateMovements = () =>
+    navigate(NavigateRoutes.CREATE_MOVEMENT);
 
   return (
     <div>
-    <div >
-
-    </div>
-    <Table>
-      <TableHeader>
-        <TableColumn>NAME</TableColumn>
-        <TableColumn>ROLE</TableColumn>
-        <TableColumn>STATUS</TableColumn>
-      </TableHeader>
-      <TableBody>
-        <TableRow key="1">
-          <TableCell>Tony Reichert</TableCell>
-          <TableCell>CEO</TableCell>
-          <TableCell>Active</TableCell>
-        </TableRow>
-        <TableRow key="2">
-          <TableCell>Zoey Lang</TableCell>
-          <TableCell>Technical Lead</TableCell>
-          <TableCell>Paused</TableCell>
-        </TableRow>
-        <TableRow key="3">
-          <TableCell>Jane Fisher</TableCell>
-          <TableCell>Senior Developer</TableCell>
-          <TableCell>Active</TableCell>
-        </TableRow>
-        <TableRow key="4">
-          <TableCell>William Howard</TableCell>
-          <TableCell>Community Manager</TableCell>
-          <TableCell>Vacation</TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+      <div className="p-4">
+        <Button onPress={handleNavigateCreateMovements}>
+          Crear movimiento
+        </Button>
+        <Divider className="mt-4" />
+        <div className="p-4">
+          <h1 className="text-3xl font-bold tracking-tight text-white-900">Lista de movimientos</h1>
+        </div>
+        <div className="p-10">
+          <Table>
+            <TableHeader>
+              <TableColumn>Numero de Facturas</TableColumn>
+              <TableColumn>Productos</TableColumn>
+            </TableHeader>
+            <TableBody>
+              <TableRow key="1">
+                <TableCell>#40042</TableCell>
+                <TableCell>Pan de jamonn y queso </TableCell>
+              </TableRow>
+              <TableRow key="2">
+                <TableCell></TableCell>
+                <TableCell>Pan de cascarita</TableCell>
+              </TableRow>
+              <TableRow key="2">
+                <TableCell></TableCell>
+                <TableCell>Pan de dulce</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
+      </div>
     </div>
   );
 };

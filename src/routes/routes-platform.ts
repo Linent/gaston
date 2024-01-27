@@ -5,21 +5,21 @@ const DASHBOARD: IRoute = {
   isActive: true,
   module: Modules.DASHBOARD,
   showInSidebar: true,
-	label: "Dashboard",
+  label: "Dashboard",
 };
 
 const PRODUCTS: IRoute = {
   isActive: false,
   module: Modules.PRODUCTS,
   showInSidebar: false,
-	label: "Productos",
+  label: "Productos",
   icon: Icons.PRODUCT,
   childrenRoutes: [
     {
       isActive: true,
       showInSidebar: true,
       name: Pages.MANAGE_PRODUCTS,
-			label: "Manejar productos",
+      label: "Manejar productos",
     },
   ],
 };
@@ -28,17 +28,22 @@ const MOVEMENTS: IRoute = {
   isActive: false,
   module: Modules.MOVEMENTS,
   showInSidebar: false,
-	label: "Movimientos",
+  label: "Movimientos",
   icon: Icons.MOVEMENT,
   childrenRoutes: [
     {
       isActive: true,
       showInSidebar: true,
       name: Pages.MANAGE_MOVEMENTS,
-			label: "Manejar movimientos",
+      label: "Manejar movimientos",
+    },
+    {
+      isActive: true,
+      showInSidebar: true,
+      name: Pages.CREATE_MOVEMENT,
+      label: "Crear movimientos",
     },
   ],
 };
-
 
 export const PLATFORM_ROUTES: IRoute[] = [DASHBOARD, PRODUCTS, MOVEMENTS];

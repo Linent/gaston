@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-import { categoryService } from "../services";
+import { generalService } from "../services";
 import { ICategory } from "../interfaces";
 
 export const useGetCategories = () => {
@@ -13,7 +13,7 @@ export const useGetCategories = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await categoryService.getCategories();
+      const response = await generalService.getCategories();
       setCategories(response?.data);
     } catch (error: any) {
       if (error?.status === 403) {

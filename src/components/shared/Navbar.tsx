@@ -85,7 +85,7 @@ export const Navbar: React.FC = () => {
                 >
                   {childrenRoutes?.map(({ label, name }) => (
                     <NavbarMenuItem
-                      key={module}
+                      key={name}
                       className="mb-2"
                       onClick={() => handleNavigate(`${module}/${name}`)}
                     >

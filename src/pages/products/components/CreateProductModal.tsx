@@ -14,8 +14,9 @@ import {
 } from "@nextui-org/react";
 import toast from "react-hot-toast";
 
-import { CreateProductData, productService } from "../../../services";
+import { generalService } from "../../../services";
 import { useGetCategories } from "../../../hooks";
+import { CreateProductData } from "../../../interfaces";
 
 interface Props {
   isOpen: boolean;
@@ -126,7 +127,7 @@ export const CreateProductModal: React.FC<Props> = ({
     data[FormKeys.COSTO_TOTAL] = costoTotal ? +costoTotal! : null;
 
     try {
-      const response = await productService.createProduct(
+      await generalService.createProduct(
         data as CreateProductData
       );
       onOpenChange();
