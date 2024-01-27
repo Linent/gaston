@@ -1,4 +1,5 @@
 import React from "react";
+import {Button} from "@nextui-org/react";
 import {
   Table,
   TableHeader,
@@ -15,13 +16,13 @@ const columns = [
     label: "Nombre del producto",
   },
   {
-    key:'descripción',
+    key:'descripcion',
     label:'Descripción'
   }
   ,
   {
     key: "existencias",
-    label: "Cantidad",
+    label: "Cantidad disponibles",
   },
   {
     key: "precio",
@@ -51,7 +52,7 @@ const data: ProductoProps[] = [
   {
     id: 6,
     nombre: "Pan de jamon y queso",
-    descripcion: "Descripcion 1",
+    descripcion: "Pan casero de jamon y queso",
     precio: 1000,
     existencias: 10,
     categoriaId: 1,
@@ -61,8 +62,8 @@ const data: ProductoProps[] = [
   },
   {
     id: 9,
-    nombre: "pan",
-    descripcion: "Descripcion 2",
+    nombre: "pan de cascarita",
+    descripcion: "El mejor pán de cascarita",
     precio: 300,
     existencias: 23,
     categoriaId: 1,
@@ -73,7 +74,7 @@ const data: ProductoProps[] = [
   {
     id: 10,
     nombre: "torta",
-    descripcion: "toratatatat",
+    descripcion: "Exquisita torta de tres leches",
     precio: 25000,
     existencias: 1,
     categoriaId: 3,
@@ -85,8 +86,8 @@ const data: ProductoProps[] = [
 
 export const ProductsManagePage: React.FC = () => {
   return (
-    <div className="p-4">
-      <div className='p-10'>
+    <div className=" p-4">
+      <div className='flex flex-wrap gap-4 items-center p-10'>
       <h1>Todos los producto</h1>
       </div>
       <div>
