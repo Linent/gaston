@@ -1,3 +1,4 @@
+import { IProduct } from "../interfaces";
 import BackendService from "./BackendService";
 
 export interface CreateProductData {
@@ -7,8 +8,6 @@ export interface CreateProductData {
   existencias: number;
   categoriaId: number;
   cantidadInicial: number;
-  costoUnitario: null;
-  costoTotal: null;
 }
 
 class ProductService extends BackendService {
@@ -18,6 +17,12 @@ class ProductService extends BackendService {
       hasToken: true,
       path: this.path,
       body,
+    });
+  }
+  async getProducts() {
+    return await super.getQuery<IProduct>({
+      hasToken: true,
+      path: this.path,
     });
   }
 }

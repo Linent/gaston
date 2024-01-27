@@ -4,12 +4,12 @@ export const CATEGORIES: ICategory[] = [
   {
     id: 1,
     descripcion: "Bebidas",
-    nombre: "Pan",
+    nombre: "Bebidas",
   },
   {
     id: 2,
     descripcion: "Pan caliente",
-    nombre: "Pan caliente",
+    nombre: "Pan",
   },
   {
     id: 3,

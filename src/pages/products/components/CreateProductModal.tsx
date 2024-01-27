@@ -8,8 +8,13 @@ import {
   ModalFooter,
   Button,
   Input,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
-import { productService, CreateProductData } from "../../../services"; // Asegúrate de importar correctamente tu servicio
+import { CreateProductData, productService } from "../../../services";
+import { ICategory } from "../../../interfaces";
+import toast from "react-hot-toast";
+import { CATEGORIES } from "../../../constants";
 
 interface Props {
   isOpen: boolean;
@@ -84,11 +89,21 @@ export const CreateProductModal: React.FC<Props> = ({
   } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
+    const { categoriaId, cantidadInicial, existencias, precio } = data;
+    data[FormKeys.CATEGORIA_ID] = +categoriaId!;
+    data[FormKeys.CANTIDAD_INICIAL] = +cantidadInicial!;
+    data[FormKeys.EXISTENCIAS] = +existencias!;
+    data[FormKeys.PRECIO] = +precio!;
     try {
-      await productService.createProduct(data as CreateProductData);
+      const response = await productService.createProduct(
+        data as CreateProductData
+      );
+      console.log(response);
       onOpenChange();
-    } catch (error) {
-      console.error("Error al crear el producto:", error);
+      toast.success("Producto creado con exito");
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.message ?? "Ha ocurrido un error");
     }
   };
 
@@ -104,6 +119,43 @@ export const CreateProductModal: React.FC<Props> = ({
               <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
                 <Input
                   isRequired
+                  label="Nombre"
+                  errorMessage={errors[FormKeys.NOMBRE]?.message}
+                  {...register(FormKeys.NOMBRE, validator[FormKeys.NOMBRE])}
+                />
+
+                <div className="flex gap-4">
+                  <Select
+                    label="Categoría"
+                    errorMessage={errors[FormKeys.CATEGORIA_ID]?.message}
+                    {...register(
+                      FormKeys.CATEGORIA_ID,
+                      validator[FormKeys.CATEGORIA_ID]
+                    )}
+                  >
+                    {CATEGORIES.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.nombre}
+                      </SelectItem>
+                    ))}
+                  </Select>
+
+                  <Input
+                    isRequired
+                    type="number"
+                    label="Precio"
+                    errorMessage={errors[FormKeys.PRECIO]?.message}
+                    startContent={
+                      <div className="pointer-events-none flex items-center">
+                        <span className="text-default-400 text-small">$</span>
+                      </div>
+                    }
+                    {...register(FormKeys.PRECIO, validator[FormKeys.PRECIO])}
+                  />
+                </div>
+
+                <Input
+                  isRequired
                   label="Descripción"
                   errorMessage={errors[FormKeys.DESCRIPCION]?.message}
                   {...register(
@@ -112,53 +164,29 @@ export const CreateProductModal: React.FC<Props> = ({
                   )}
                 />
 
-                <Input
-                  isRequired
-                  label="Nombre"
-                  errorMessage={errors[FormKeys.NOMBRE]?.message}
-                  {...register(FormKeys.NOMBRE, validator[FormKeys.NOMBRE])}
-                />
+                <div className="flex gap-4">
+                  <Input
+                    isRequired
+                    type="number"
+                    label="Existencias"
+                    errorMessage={errors[FormKeys.EXISTENCIAS]?.message}
+                    {...register(
+                      FormKeys.EXISTENCIAS,
+                      validator[FormKeys.EXISTENCIAS]
+                    )}
+                  />
 
-                <Input
-                  isRequired
-                  type="number"
-                  label="Precio"
-                  errorMessage={errors[FormKeys.PRECIO]?.message}
-                  {...register(FormKeys.PRECIO, validator[FormKeys.PRECIO])}
-                />
-
-                <Input
-                  isRequired
-                  type="number"
-                  label="Existencias"
-                  errorMessage={errors[FormKeys.EXISTENCIAS]?.message}
-                  {...register(
-                    FormKeys.EXISTENCIAS,
-                    validator[FormKeys.EXISTENCIAS]
-                  )}
-                />
-
-                <Input
-                  isRequired
-                  type="number"
-                  label="Categoría ID"
-                  errorMessage={errors[FormKeys.CATEGORIA_ID]?.message}
-                  {...register(
-                    FormKeys.CATEGORIA_ID,
-                    validator[FormKeys.CATEGORIA_ID]
-                  )}
-                />
-
-                <Input
-                  isRequired
-                  type="number"
-                  label="Cantidad Inicial"
-                  errorMessage={errors[FormKeys.CANTIDAD_INICIAL]?.message}
-                  {...register(
-                    FormKeys.CANTIDAD_INICIAL,
-                    validator[FormKeys.CANTIDAD_INICIAL]
-                  )}
-                />
+                  <Input
+                    isRequired
+                    type="number"
+                    label="Cantidad Inicial"
+                    errorMessage={errors[FormKeys.CANTIDAD_INICIAL]?.message}
+                    {...register(
+                      FormKeys.CANTIDAD_INICIAL,
+                      validator[FormKeys.CANTIDAD_INICIAL]
+                    )}
+                  />
+                </div>
               </form>
             </ModalBody>
             <ModalFooter>

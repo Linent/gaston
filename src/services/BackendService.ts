@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { StorageKeys } from "../enums";
 
 import { BACKEND_URL } from "../config";
@@ -24,8 +24,18 @@ interface PutRequest {
 }
 
 class BackendService {
-  protected getToken(): string | null {
+  private getToken(): string | null {
     return localStorage.getItem(StorageKeys.TOKEN);
+  }
+
+  private getHeaders(hasToken?: boolean): AxiosRequestConfig["headers"] {
+    if (hasToken) {
+      const token = this.getToken();
+      return {
+        Authorization: `Bearer ${token}`,
+      };
+    }
+    return {};
   }
 
   protected async getQuery<T>({
@@ -33,8 +43,7 @@ class BackendService {
     hasToken,
     params,
   }: GetRequest): Promise<T> {
-    const token = hasToken ? this.getToken() : undefined;
-    const headers = { token: token };
+    const headers = this.getHeaders(hasToken);
     return await axios
       .get<T>(`${BACKEND_URL}/${path}`, { headers, params })
       .then((response) => response.data)
@@ -49,8 +58,7 @@ class BackendService {
     hasToken,
     params,
   }: PostRequest): Promise<T> {
-    const token = hasToken ? this.getToken() : undefined;
-    const headers = { token: token };
+    const headers = this.getHeaders(hasToken);
     return await axios
       .post<T>(`${BACKEND_URL}/${path}`, body, { headers, params })
       .then((response) => response.data)
@@ -65,8 +73,7 @@ class BackendService {
     hasToken,
     params,
   }: PutRequest): Promise<T> {
-    const token = hasToken ? this.getToken() : undefined;
-    const headers = { token: token };
+    const headers = this.getHeaders(hasToken);
     return await axios
       .put<T>(`${BACKEND_URL}/${path}`, body, { headers, params })
       .then((response) => response.data)

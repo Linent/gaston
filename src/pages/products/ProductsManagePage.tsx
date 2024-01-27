@@ -13,6 +13,7 @@ import {
 } from "@nextui-org/react";
 import { CreateProductModal } from "./components";
 import { IProduct } from "../../interfaces";
+import { useGetProducts } from "../../hooks";
 
 const columns = [
   {
@@ -85,6 +86,9 @@ const data: IProduct[] = [
 
 export const ProductsManagePage: React.FC = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+
+  const {} = useGetProducts();
 
   return (
     <>
