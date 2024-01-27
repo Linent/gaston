@@ -34,7 +34,7 @@ export const Navbar: React.FC = () => {
     return navigate(NavigateRoutes.LOGIN);
   };
 
-  const handleNavigate = (path: NavigateRoutes) => {
+  const handleNavigate = (path: string) => {
     if (path === NavigateRoutes.LOGIN) return handleCloseSession();
     return navigate(path);
   };

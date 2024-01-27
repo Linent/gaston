@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-import { LoginPage, RegisterPage } from "./pages";
+import { LoginPage, ProductsManagePage, RegisterPage } from "./pages";
 import { generateRoutes, PLATFORM_ROUTES, ProtectedRoutes } from "./routes";
 
 import { StoreProvider } from "./context";
@@ -31,10 +31,7 @@ function App() {
           {/* Guard de plataforma */}
           <Route element={<ProtectedRoutes />}>
             <Route path={Modules.PLATFORM} element={<Layout />}>
-              {/* Redireccionamiento */}
-              <Route path="" element={<Navigate to={Modules.DASHBOARD} />} />
-              {/* Mapeo de rutas de platform */}
-              {PLATFORM_ROUTES.map(generateRoutes)}
+             <Route path={"products/manage"} element={<ProductsManagePage />}/>
             </Route>
           </Route>
         </Routes>
@@ -44,3 +41,8 @@ function App() {
 }
 
 export default App;
+
+ {/* Redireccionamiento */}
+// <Route path="" element={<Navigate to={Modules.DASHBOARD} />} />
+ {/* Mapeo de rutas de platform */}
+ //{PLATFORM_ROUTES.map(generateRoutes)}
