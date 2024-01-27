@@ -42,46 +42,10 @@ const columns = [
   },
 ];
 
-const data: IProduct[] = [
-  {
-    id: 6,
-    nombre: "Pan de jamon y queso",
-    descripcion: "Pan casero de jamon y queso",
-    precio: 1000,
-    existencias: 10,
-    categoriaId: 1,
-    cantidadInicial: 10,
-    costoUnitario: null,
-    costoTotal: null,
-  },
-  {
-    id: 9,
-    nombre: "pan de cascarita",
-    descripcion: "El mejor pán de cascarita",
-    precio: 300,
-    existencias: 23,
-    categoriaId: 1,
-    cantidadInicial: 30,
-    costoUnitario: null,
-    costoTotal: null,
-  },
-  {
-    id: 10,
-    nombre: "torta",
-    descripcion: "Exquisita torta de tres leches",
-    precio: 25000,
-    existencias: 1,
-    categoriaId: 3,
-    cantidadInicial: 1,
-    costoUnitario: null,
-    costoTotal: null,
-  },
-];
-
 export const ProductsManagePage: React.FC = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const {} = useGetProducts();
+  const { products, isLoading, error } = useGetProducts();
 
   const renderCell = React.useCallback((product: any, columnKey: any) => {
     const cellValue = product[columnKey];
@@ -130,7 +94,7 @@ export const ProductsManagePage: React.FC = () => {
                 <TableColumn key={column.key}>{column.label}</TableColumn>
               )}
             </TableHeader>
-            <TableBody items={data}>
+            <TableBody items={products}>
               {(item) => (
                 <TableRow key={item.id}>
                   {(columnKey) => (

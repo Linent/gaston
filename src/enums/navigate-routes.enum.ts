@@ -6,4 +6,5 @@ export const NavigateRoutes = {
   REGISTER: `/${Modules.AUTH}/${Pages.REGISTER}`,
   DASHBOARD: `/${Modules.PLATFORM}/${Modules.DASHBOARD}`,
   MANAGE_PRODUCTS: `/${Modules.PLATFORM}/${Modules.PRODUCTS}/${Pages.MANAGE_PRODUCTS}`,
+  MANAGE_MOVEMENTS: `/${Modules.PLATFORM}/${Modules.MOVEMENTS}/${Pages.MANAGE_MOVEMENTS}`,
 };

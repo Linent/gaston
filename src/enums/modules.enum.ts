@@ -3,4 +3,5 @@ export enum Modules {
   PLATFORM = "platform",
   DASHBOARD = "dashboard",
   PRODUCTS = "products",
+  MOVEMENTS = "movements",
 }

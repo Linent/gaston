@@ -3,5 +3,7 @@ export enum Pages {
     REGISTER = 'register',
     LOGIN = 'login',
     //* Products
-    MANAGE_PRODUCTS = 'manage'
+    MANAGE_PRODUCTS = 'manage',
+    // * Movements
+    MANAGE_MOVEMENTS = 'manage'
   }
