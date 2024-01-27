@@ -17,19 +17,13 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { Info, Modules, NavigateRoutes, StorageKeys } from "../../enums";
 import { PLATFORM_ROUTES } from "../../routes";
-import { FaShoppingBasket } from "react-icons/fa";
-
-const navItems = [
-  { name: "Manejar Productos", path: NavigateRoutes.MANAGE_PRODUCTS },
-];
-
-const menuItems = [{ name: "Cerrar Sesión", path: NavigateRoutes.LOGIN }];
+import { Icon } from "@iconify/react";
 
 export const Navbar: React.FC = () => {
   const navigate = useNavigate();
 
   const [navbarIsOpen, setNavbarIsOpen] = useState(false);
-  const toggleNavbarIsOpen = () => setNavbarIsOpen(!navbarIsOpen)
+  const toggleNavbarIsOpen = () => setNavbarIsOpen(!navbarIsOpen);
 
   const location = useLocation();
   const { pathname } = location;
@@ -52,17 +46,15 @@ export const Navbar: React.FC = () => {
         <NavbarMenuToggle onClick={toggleNavbarIsOpen} />
       </NavbarContent>
 
-      <NavbarContent className="sm:hidden pr-3" justify="center">
+      <NavbarContent className="pr-3" justify="center">
         <NavbarBrand>
           {/* <AcmeLogo /> */}
-          <p className="font-bold text-inherit">{Info.APP_TITLE}</p>
-        </NavbarBrand>
-      </NavbarContent>
-
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarBrand>
-          {/*   <AcmeLogo /> */}
-          <p className="font-bold text-inherit">{Info.APP_TITLE}</p>
+          <a
+            className="font-bold text-inherit cursor-pointer md:text-xl"
+            onClick={() => handleNavigate(NavigateRoutes.DASHBOARD)}
+          >
+            {Info.APP_TITLE}
+          </a>
         </NavbarBrand>
       </NavbarContent>
 
@@ -83,10 +75,10 @@ export const Navbar: React.FC = () => {
       <NavbarMenu>
         <Accordion variant="splitted">
           {PLATFORM_ROUTES.filter((e) => e.childrenRoutes).map(
-            ({ module, label, childrenRoutes }) => {
+            ({ module, label, childrenRoutes, icon }) => {
               return (
                 <AccordionItem
-                  startContent={""}
+                  startContent={icon ? <Icon icon={icon} /> : null}
                   key={module}
                   aria-label={module}
                   title={label}
@@ -112,24 +104,9 @@ export const Navbar: React.FC = () => {
           )}
         </Accordion>
 
-        {menuItems.map(({ name, path }, index) => (
-          <NavbarMenuItem
-            key={`${path}-${index}`}
-            onClick={() => handleNavigate(path)}
-          >
-            <span
-              className={`text-${
-                index === 2
-                  ? "warning"
-                  : path === NavigateRoutes.LOGIN
-                  ? "danger"
-                  : "foreground"
-              } cursor-pointer`}
-            >
-              {name}
-            </span>
-          </NavbarMenuItem>
-        ))}
+        <NavbarMenuItem onClick={() => handleNavigate(NavigateRoutes.LOGIN)}>
+          <span className={`text-danger cursor-pointer`}>Cerrar sesión</span>
+        </NavbarMenuItem>
       </NavbarMenu>
     </NextUiNavbar>
   );

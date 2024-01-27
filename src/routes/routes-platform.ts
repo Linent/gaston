@@ -13,6 +13,7 @@ const PRODUCTS: IRoute = {
   module: Modules.PRODUCTS,
   showInSidebar: false,
 	label: "Productos",
+  icon: "material-symbols:shopping-basket-sharp",
   childrenRoutes: [
     {
       isActive: true,

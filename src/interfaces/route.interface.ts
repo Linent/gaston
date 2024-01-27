@@ -6,6 +6,7 @@ export interface IRoute {
   module: Modules;
   childrenRoutes?: IChildrenRoute[];
   label: string;
+  icon?: string;
 }
 
 export interface IChildrenRoute {
