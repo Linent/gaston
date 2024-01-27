@@ -20,12 +20,13 @@ const columns = [
     label: "Nombre del producto",
   },
   {
-    key: "descripción",
-    label: "Descripción",
-  },
+    key:'descripcion',
+    label:'Descripción'
+  }
+  ,
   {
     key: "existencias",
-    label: "Cantidad",
+    label: "Cantidad disponibles",
   },
   {
     key: "precio",
@@ -50,7 +51,7 @@ const data: IProduct[] = [
   {
     id: 6,
     nombre: "Pan de jamon y queso",
-    descripcion: "Descripcion 1",
+    descripcion: "Pan casero de jamon y queso",
     precio: 1000,
     existencias: 10,
     categoriaId: 1,
@@ -60,8 +61,8 @@ const data: IProduct[] = [
   },
   {
     id: 9,
-    nombre: "pan",
-    descripcion: "Descripcion 2",
+    nombre: "pan de cascarita",
+    descripcion: "El mejor pán de cascarita",
     precio: 300,
     existencias: 23,
     categoriaId: 1,
@@ -72,7 +73,7 @@ const data: IProduct[] = [
   {
     id: 10,
     nombre: "torta",
-    descripcion: "toratatatat",
+    descripcion: "Exquisita torta de tres leches",
     precio: 25000,
     existencias: 1,
     categoriaId: 3,
