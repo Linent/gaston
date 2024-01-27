@@ -6,7 +6,6 @@ import {
   TableColumn,
   TableRow,
   TableCell,
-  getKeyValue,
   useDisclosure,
   Divider,
   Button,
@@ -14,7 +13,6 @@ import {
 } from "@nextui-org/react";
 
 import { CreateProductModal } from "./components";
-import { IProduct } from "../../interfaces";
 import { useGetProducts } from "../../hooks";
 import { Icon } from "@iconify/react";
 import { Icons } from "../../enums";
@@ -45,7 +43,7 @@ const columns = [
 export const ProductsManagePage: React.FC = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const { products, isLoading, error } = useGetProducts();
+  const { products, isLoading, error, getProducts } = useGetProducts();
 
   const renderCell = React.useCallback((product: any, columnKey: any) => {
     const cellValue = product[columnKey];
@@ -80,7 +78,11 @@ export const ProductsManagePage: React.FC = () => {
 
   return (
     <>
-      <CreateProductModal isOpen={isOpen} onOpenChange={onOpenChange} />
+      <CreateProductModal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        getProducts={getProducts}
+      />
       <div className="p-4">
         <Button onPress={onOpen}>Crear producto</Button>
         <Divider className="mt-4" />

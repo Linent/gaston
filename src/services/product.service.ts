@@ -5,9 +5,10 @@ export interface CreateProductData {
   descripcion: string;
   nombre: string;
   precio: number;
-  existencias: number;
   categoriaId: number;
   cantidadInicial: number;
+  costoUnitario: number | null;
+  costoTotal: number | null;
 }
 
 class ProductService extends BackendService {
@@ -20,7 +21,7 @@ class ProductService extends BackendService {
     });
   }
   async getProducts() {
-    return await super.getQuery<{data: IProduct[]}>({
+    return await super.getQuery<{ data: IProduct[] }>({
       hasToken: true,
       path: this.path,
     });
