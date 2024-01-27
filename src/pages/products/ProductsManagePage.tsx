@@ -7,7 +7,12 @@ import {
   TableRow,
   TableCell,
   getKeyValue,
+  useDisclosure,
+  Divider,
+  Button,
 } from "@nextui-org/react";
+import { CreateProductModal } from "./components";
+import { IProduct } from "../../interfaces";
 
 const columns = [
   {
@@ -15,10 +20,9 @@ const columns = [
     label: "Nombre del producto",
   },
   {
-    key:'descripción',
-    label:'Descripción'
-  }
-  ,
+    key: "descripción",
+    label: "Descripción",
+  },
   {
     key: "existencias",
     label: "Cantidad",
@@ -28,18 +32,13 @@ const columns = [
     label: "Precio",
   },
 ];
-interface ProductoProps {
-  id: number;
-  descripcion: string;
-  nombre: string;
-  precio: number;
-  existencias: number;
-  categoriaId: number;
-  cantidadInicial: number;
-  costoUnitario: null;
-  costoTotal: null;
-}
-const Producto: React.FC<ProductoProps> = ({ nombre, precio, existencias, descripcion }) => (
+
+const Producto: React.FC<IProduct> = ({
+  nombre,
+  precio,
+  existencias,
+  descripcion,
+}) => (
   <TableRow>
     <TableCell>{nombre}</TableCell>
     <TableCell>{descripcion}</TableCell>
@@ -47,7 +46,7 @@ const Producto: React.FC<ProductoProps> = ({ nombre, precio, existencias, descri
     <TableCell>{existencias}</TableCell>
   </TableRow>
 );
-const data: ProductoProps[] = [
+const data: IProduct[] = [
   {
     id: 6,
     nombre: "Pan de jamon y queso",
@@ -84,29 +83,36 @@ const data: ProductoProps[] = [
 ];
 
 export const ProductsManagePage: React.FC = () => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   return (
-    <div className="p-4">
-      <div className='p-10'>
-      <h1>Todos los producto</h1>
+    <>
+      <CreateProductModal isOpen={isOpen} onOpenChange={onOpenChange} />
+      <div className="p-4">
+        <Button onPress={onOpen}>Crear producto</Button>
+        <Divider className="mt-4" />
+        <div className="p-10">
+          <h1>Todos los producto</h1>
+        </div>
+        <div>
+          <Table aria-label="Example static collection table">
+            <TableHeader columns={columns}>
+              {(column) => (
+                <TableColumn key={column.key}>{column.label}</TableColumn>
+              )}
+            </TableHeader>
+            <TableBody>
+              {data.map((row) => (
+                <TableRow key={row.id}>
+                  {(columnKey) => (
+                    <TableCell>{getKeyValue(row, columnKey)}</TableCell>
+                  )}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
-      <div>
-        <Table aria-label="Example static collection table">
-          <TableHeader columns={columns}>
-            {(column) => (
-              <TableColumn key={column.key}>{column.label}</TableColumn>
-            )}
-          </TableHeader>
-          <TableBody>
-            {data.map((row) => (
-              <TableRow key={row.id}>
-                {(columnKey) => (
-                  <TableCell>{getKeyValue(row, columnKey)}</TableCell>
-                )}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-    </div>
+    </>
   );
 };
