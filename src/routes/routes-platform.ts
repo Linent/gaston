@@ -24,4 +24,21 @@ const PRODUCTS: IRoute = {
   ],
 };
 
-export const PLATFORM_ROUTES: IRoute[] = [DASHBOARD, PRODUCTS];
+const MOVEMENTS: IRoute = {
+  isActive: false,
+  module: Modules.MOVEMENTS,
+  showInSidebar: false,
+	label: "Movimientos",
+  icon: Icons.MOVEMENT,
+  childrenRoutes: [
+    {
+      isActive: true,
+      showInSidebar: true,
+      name: Pages.MANAGE_MOVEMENTS,
+			label: "Manejar movimientos",
+    },
+  ],
+};
+
+
+export const PLATFORM_ROUTES: IRoute[] = [DASHBOARD, PRODUCTS, MOVEMENTS];

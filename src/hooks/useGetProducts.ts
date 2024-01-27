@@ -13,7 +13,7 @@ export const useGetProducts = () => {
     setError(null)
     try {
       const response = await productService.getProducts();
-      console.log(response)
+      setProducts(response?.data)
     } catch (error: any) {
       if(error?.status === 403) {
         setError("No estás autenticado")

@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import {
   Dashboard,
   LoginPage,
+  MovementsManagePage,
   ProductsManagePage,
   RegisterPage,
 } from "./pages";
@@ -41,6 +42,12 @@ function App() {
                 <Route
                   path={Pages.MANAGE_PRODUCTS}
                   element={<ProductsManagePage />}
+                />
+              </Route>
+              <Route path={Modules.MOVEMENTS}>
+                <Route
+                  path={Pages.MANAGE_MOVEMENTS}
+                  element={<MovementsManagePage />}
                 />
               </Route>
             </Route>

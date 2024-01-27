@@ -20,7 +20,7 @@ class ProductService extends BackendService {
     });
   }
   async getProducts() {
-    return await super.getQuery<IProduct>({
+    return await super.getQuery<{data: IProduct[]}>({
       hasToken: true,
       path: this.path,
     });
