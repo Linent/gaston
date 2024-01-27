@@ -6,7 +6,6 @@ import {
   TableColumn,
   TableRow,
   TableCell,
-  getKeyValue,
   useDisclosure,
   Divider,
   Button,
@@ -45,7 +44,7 @@ const columns = [
 export const ProductsManagePage: React.FC = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const { products, isLoading, error } = useGetProducts();
+  const { products, isLoading, error, getProducts } = useGetProducts();
 
   const renderCell = React.useCallback((product: any, columnKey: any) => {
     const cellValue = product[columnKey];
@@ -80,7 +79,11 @@ export const ProductsManagePage: React.FC = () => {
 
   return (
     <>
-      <CreateProductModal isOpen={isOpen} onOpenChange={onOpenChange} />
+      <CreateProductModal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        getProducts={getProducts}
+      />
       <div className="p-4">
         <div className="flex">
           <div className="p-4">

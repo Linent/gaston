@@ -6,6 +6,6 @@ export interface IProduct {
   existencias: number;
   categoriaId: number;
   cantidadInicial: number;
-  costoUnitario: null;
-  costoTotal: null;
+  costoUnitario: number | null;
+  costoTotal: number | null;
 }
