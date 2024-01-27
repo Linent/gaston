@@ -13,7 +13,7 @@ import {
   Tooltip,
 } from "@nextui-org/react";
 
-import { CreateProductModal } from "./components";
+import { CreateProductModal, SearchProducduct } from "./components";
 import { IProduct } from "../../interfaces";
 import { useGetProducts } from "../../hooks";
 import { Icon } from "@iconify/react";
@@ -82,7 +82,14 @@ export const ProductsManagePage: React.FC = () => {
     <>
       <CreateProductModal isOpen={isOpen} onOpenChange={onOpenChange} />
       <div className="p-4">
-        <Button onPress={onOpen}>Crear producto</Button>
+        <div className="flex">
+          <div className="p-4">
+            <Button onPress={onOpen}>Crear producto</Button>
+          </div>
+          <div className="p-4">
+            <SearchProducduct/> 
+          </div>
+        </div>
         <Divider className="mt-4" />
         <div className="p-10">
           <h1>Todos los producto</h1>
