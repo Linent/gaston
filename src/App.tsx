@@ -7,7 +7,7 @@ import {
   ProductsManagePage,
   RegisterPage,
 } from "./pages";
-import { generateRoutes, PLATFORM_ROUTES, ProtectedRoutes } from "./routes";
+import { ProtectedRoutes } from "./routes";
 
 import { StoreProvider } from "./context";
 
@@ -52,12 +52,3 @@ function App() {
 }
 
 export default App;
-
-{
-  /* Redireccionamiento */
-}
-// <Route path="" element={<Navigate to={Modules.DASHBOARD} />} />
-{
-  /* Mapeo de rutas de platform */
-}
-//{PLATFORM_ROUTES.map(generateRoutes)}
