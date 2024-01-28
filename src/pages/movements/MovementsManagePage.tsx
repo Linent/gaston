@@ -16,6 +16,7 @@ import { Icon } from "@iconify/react";
 import { Icons, NavigateRoutes } from "../../enums";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useGetReports } from "../../hooks";
 /*const {products,
   isLoading,
   error,
@@ -52,6 +53,8 @@ export const MovementsManagePage: React.FC = () => {
   const handleNavigateCreateMovements = () =>
     navigate(NavigateRoutes.CREATE_MOVEMENT);
 
+  const { movementReport, salesCostReport, salesReport } = useGetReports();
+
   return (
     <div>
       <div className="p-4">
@@ -60,7 +63,9 @@ export const MovementsManagePage: React.FC = () => {
         </Button>
         <Divider className="mt-4" />
         <div className="p-4">
-          <h1 className="text-3xl font-bold tracking-tight text-white-900">Lista de movimientos</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-white-900">
+            Lista de movimientos
+          </h1>
         </div>
         <div className="p-10">
           <Table>

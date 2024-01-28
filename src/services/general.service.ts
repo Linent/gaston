@@ -60,10 +60,24 @@ class GeneralService extends BackendService {
 
   /* MOVEMENTS */
 
-  async getMovements() {
+  async getMovementReport() {
     return await super.getQuery<{ data: any }>({
       hasToken: true,
-      path: BackendRoute.MOVEMENT,
+      path: `${BackendRoute.MOVEMENT}/reporteMovimientos`,
+    });
+  }
+
+  async getSalesReport() {
+    return await super.getQuery<{ data: any }>({
+      hasToken: true,
+      path: `${BackendRoute.MOVEMENT}/reporteVentas`,
+    });
+  }
+
+  async getSalesCostReport() {
+    return await super.getQuery<{ data: any }>({
+      hasToken: true,
+      path: `${BackendRoute.MOVEMENT}/reporteVentasXcosto`,
     });
   }
 
