@@ -16,7 +16,7 @@ import { Icon } from "@iconify/react";
 import { Icons, NavigateRoutes } from "../../enums";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useGetMovements } from "../../hooks";
+import { useGetReports } from "../../hooks";
 /*const {products,
   isLoading,
   error,
@@ -53,7 +53,7 @@ export const MovementsManagePage: React.FC = () => {
   const handleNavigateCreateMovements = () =>
     navigate(NavigateRoutes.CREATE_MOVEMENT);
 
-  const { movementReport, salesCostReport, salesReport } = useGetMovements();
+  const { movementReport, salesCostReport, salesReport } = useGetReports();
 
   return (
     <div>

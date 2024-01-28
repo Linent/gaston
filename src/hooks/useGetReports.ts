@@ -3,8 +3,8 @@ import { IProduct } from "../interfaces";
 import toast from "react-hot-toast";
 import { generalService } from "../services";
 
-export const useGetMovements = () => {
-  const [movementReport, setMovementReport] = useState<any[]>([]);
+export const useGetReports = () => {
+  const [movementReport, setMovementReport] = useState<[]>([]);
   const [salesReport, setSalesReport] = useState<any>();
   const [salesCostReport, setSalesCostReport] = useState<any>();
 
