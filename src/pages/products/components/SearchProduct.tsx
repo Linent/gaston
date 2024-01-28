@@ -1,13 +1,17 @@
-import {Input} from "@nextui-org/react";
-import {SearchIcon} from "./icons";
+import {Input, InputProps} from "@nextui-org/react";
 
-export  const SearchProducduct = () =>{
+import {SearchIcon} from "./icons";
+interface Props extends InputProps {
+
+}
+
+export  const SearchProduct: React.FC<Props> = ({...props}) =>{
     return (
         <div className="w-[350px] rounded-2xl flex justify-center items-center text-white shadow-lg">
           <Input
             label="Buscar"
-            isClearable
             radius="lg"
+            isClearable
             classNames={{
               label: "text-black/50 dark:text-white/90",
               input: [
@@ -33,6 +37,7 @@ export  const SearchProducduct = () =>{
             startContent={
               <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
             }
+            {...props}
           />
         </div>
     );

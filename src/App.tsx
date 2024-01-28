@@ -45,7 +45,7 @@ function App() {
                   path={Pages.MANAGE_PRODUCTS}
                   element={<ProductsManagePage />}
                 />
-                 <Route
+                <Route
                   path={Pages.PRODUCT_BY_ID}
                   element={<ProductByIdPage />}
                 />
@@ -55,7 +55,7 @@ function App() {
                   path={Pages.MANAGE_MOVEMENTS}
                   element={<MovementsManagePage />}
                 />
-                 <Route
+                <Route
                   path={Pages.CREATE_MOVEMENT}
                   element={<CreateMovementsPage />}
                 />

@@ -81,6 +81,20 @@ class BackendService {
         throw { ...error?.response?.data, status: error?.response?.status };
       });
   }
+
+  protected async deleteQuery<T>({
+    path,
+    hasToken,
+    params,
+  }: PutRequest): Promise<T> {
+    const headers = this.getHeaders(hasToken);
+    return await axios
+      .delete<T>(`${BACKEND_URL}/${path}`, { headers, params })
+      .then((response) => response.data)
+      .catch((error) => {
+        throw { ...error?.response?.data, status: error?.response?.status };
+      });
+  }
 }
 
 export default BackendService;

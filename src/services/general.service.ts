@@ -1,6 +1,11 @@
 import BackendService from "./BackendService";
 
-import { CreateProductData, ICategory, IMovementType, IProduct } from "../interfaces";
+import {
+  CreateProductData,
+  ICategory,
+  IMovementType,
+  IProduct,
+} from "../interfaces";
 
 interface GetTokenBody {
   usuario: string;
@@ -8,14 +13,14 @@ interface GetTokenBody {
 }
 
 interface MovementData {
-  cantidad: number,
-  costoTotal: number | null,
-  costoUnitario: number | null,
-  productoId: number
+  cantidad: number;
+  costoTotal: number | null;
+  costoUnitario: number | null;
+  productoId: number;
 }
 interface CreateMovementData {
-  movimientos: MovementData[],
-  tipoMovimientoId:number
+  movimientos: MovementData[];
+  tipoMovimientoId: number;
 }
 
 enum BackendRoute {
@@ -23,7 +28,7 @@ enum BackendRoute {
   PRODUCT = "Producto",
   MOVEMENT = "Movimiento",
   TOKEN = "token",
-  MOVEMENT_TYPE = "TipoMovimiento"
+  MOVEMENT_TYPE = "TipoMovimiento",
 }
 
 class GeneralService extends BackendService {
@@ -62,25 +67,30 @@ class GeneralService extends BackendService {
     });
   }
 
-  async getProductById(id: string) {
+  async getProductById(id: string | number) {
     return await super.getQuery<{ data: IProduct }>({
       hasToken: true,
       path: `${BackendRoute.PRODUCT}/${id}`,
     });
   }
 
-  /* MOVEMENTS */
-  
-  async createMovements({movimientos,tipoMovimientoId}: CreateMovementData) {
-    const body = {movimientos,tipoMovimientoId}
-    return await super.postQuery<{ data: any }>({
+  async deleteProduct(id: string | number) {
+    return await super.deleteQuery<{ data: IProduct }>({
       hasToken: true,
-      path: `${BackendRoute.MOVEMENT}/registrarMovimientos`,
-      body
+      path: `${BackendRoute.PRODUCT}/eliminarProducto/${id}`,
     });
   }
 
+  /* MOVEMENTS */
 
+  async createMovements({ movimientos, tipoMovimientoId }: CreateMovementData) {
+    const body = { movimientos, tipoMovimientoId };
+    return await super.postQuery<{ data: any }>({
+      hasToken: true,
+      path: `${BackendRoute.MOVEMENT}/registrarMovimientos`,
+      body,
+    });
+  }
 
   async getMovementReport() {
     return await super.getQuery<{ data: any }>({
@@ -111,7 +121,6 @@ class GeneralService extends BackendService {
       path: BackendRoute.MOVEMENT_TYPE,
     });
   }
-
 }
 
 export const generalService = new GeneralService();

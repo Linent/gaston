@@ -261,11 +261,10 @@ export const CreateMovementsPage: React.FC = () => {
 
   const handleOnClose = (success?: boolean) => {
     onClose();
-    if(success) {
+    if (success) {
       getProducts();
       setSelectedKeys(new Set());
     }
-   
   };
 
   return (

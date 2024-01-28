@@ -79,11 +79,9 @@ export const MovementsManagePage: React.FC = () => {
                 <TableCell>Pan de jamonn y queso </TableCell>
               </TableRow>
               <TableRow key="2">
-                <TableCell></TableCell>
                 <TableCell>Pan de cascarita</TableCell>
               </TableRow>
               <TableRow key="2">
-                <TableCell></TableCell>
                 <TableCell>Pan de dulce</TableCell>
               </TableRow>
             </TableBody>
