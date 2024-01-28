@@ -4,38 +4,47 @@ import toast from "react-hot-toast";
 import { generalService } from "../services";
 
 export const useGetMovements = () => {
-  const [products, setProducts] = useState<IProduct[]>([]);
+  const [movementReport, setMovementReport] = useState<any[]>([]);
+  const [salesReport, setSalesReport] = useState<any>();
+  const [salesCostReport, setSalesCostReport] = useState<any>();
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const getProducts = async () => {
+  const getData = async () => {
     setIsLoading(true);
-    setError(null)
+    setError(null);
     try {
-      const response = await generalService.getMovements();
-      setProducts(response?.data)
+      const [movementReport, salesReport, salesCostReport] = await Promise.all([
+        generalService.getMovementReport(),
+        generalService.getSalesReport(),
+        generalService.getSalesCostReport(),
+      ]);
+      setMovementReport(movementReport.data);
+      setSalesReport(salesReport.data);
+      setSalesCostReport(salesCostReport.data);
     } catch (error: any) {
-      if(error?.status === 403) {
-        setError("No estás autenticado")
-        return toast.error("No estás autenticado")
+      if (error?.status === 403) {
+        setError("No estás autenticado");
+        return toast.error("No estás autenticado");
       }
-      setError(error?.message)
-      toast.error(error?.message ?? "Ha ocurrido un error")
+      setError(error?.message);
+      toast.error(error?.message ?? "Ha ocurrido un error");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
-
+  };
 
   useEffect(() => {
-    getProducts();
-  }, [])
-  
+    getData();
+  }, []);
 
   return {
-    products,
     isLoading,
     error,
-    getProducts
-  }
+    getData,
+    movementReport,
+    salesReport,
+    salesCostReport,
+  };
 };
