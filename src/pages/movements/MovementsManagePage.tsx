@@ -49,7 +49,7 @@ const movimientos = [
 
 export const MovementsManagePage: React.FC = () => {
   const navigate = useNavigate();
-
+  
   const handleNavigateCreateMovements = () =>
     navigate(NavigateRoutes.CREATE_MOVEMENT);
 

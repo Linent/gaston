@@ -13,12 +13,14 @@ import {
   TableHeader,
   TableRow,
   getKeyValue,
+  useDisclosure,
 } from "@nextui-org/react";
 import { useGetMovementTypes, useGetProducts } from "../../hooks";
 import { useCallback, useMemo, useState } from "react";
 import { IMovementType, IProduct } from "../../interfaces";
 import { Icon } from "@iconify/react";
 import { Icons } from "../../enums";
+import CreateMovementsModal from "./components/CreateMovementsModal";
 
 const columns = [
   {
@@ -44,10 +46,13 @@ const columns = [
 ];
 
 export const CreateMovementsPage: React.FC = () => {
-  const { movementTypes } = useGetMovementTypes();
-  const { products } = useGetProducts();
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const [selectedMovementType, setSelectedMovementType] = useState<IMovementType | null>(null);
+  const { movementTypes } = useGetMovementTypes();
+  const { products, getProducts } = useGetProducts();
+
+  const [selectedMovementType, setSelectedMovementType] =
+    useState<IMovementType | null>(null);
 
   const [filterValue, setFilterValue] = useState("");
 
@@ -145,6 +150,7 @@ export const CreateMovementsPage: React.FC = () => {
     });
   }, [sortDescriptor, items]);
 
+  const isContinueDisabled = !selectedMovementType || !selectedKeys.size;
 
   const topContent = useMemo(() => {
     return (
@@ -239,18 +245,33 @@ export const CreateMovementsPage: React.FC = () => {
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
+  const selectedProducts = useCallback(
+    () =>
+      selectedKeys === "all"
+        ? products
+        : selectedKeys.size
+        ? products.filter((item) => selectedKeys.has(item.id.toString()))
+        : [],
+    [products, selectedKeys]
+  );
+
   const continueMovement = () => {
-    const selectedMovements = products.filter((item) =>
-      selectedKeys.has(item.id.toString())
-    );
+    onOpen();
+  };
+
+  const handleOnClose = (success?: boolean) => {
+    onClose();
+    if(success) {
+      getProducts();
+      setSelectedKeys(new Set());
+    }
+   
   };
 
   return (
     <div className="py-4 px-4 md:px-8 lg:px-16">
       <div className="py-4 ">
-        <h1>
-         Crear movimiento
-        </h1>
+        <h1>Crear movimiento</h1>
       </div>
       <div>
         <Table
@@ -289,14 +310,27 @@ export const CreateMovementsPage: React.FC = () => {
         </Table>
         <Divider className="mb-2" />
         <div className="flex justify-between items-center gap-4">
-        <p className="text-foreground-400">
-          Debes seleccionar el tipo de movimiento y los productos para continuar
+          <p className="text-foreground-400">
+            {isContinueDisabled
+              ? " Debes seleccionar el tipo de movimiento y los productos para continuar"
+              : null}
           </p>
-          <Button isDisabled={!selectedMovementType} onClick={continueMovement} color="success" size="md">
+          <Button
+            isDisabled={isContinueDisabled}
+            onClick={continueMovement}
+            color="success"
+            size="md"
+          >
             Continuar
           </Button>
         </div>
       </div>
+      <CreateMovementsModal
+        isOpen={isOpen}
+        onClose={handleOnClose}
+        movementType={selectedMovementType}
+        products={selectedProducts()}
+      />
     </div>
   );
 };

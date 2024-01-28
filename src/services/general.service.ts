@@ -7,6 +7,17 @@ interface GetTokenBody {
   password: string;
 }
 
+interface MovementData {
+  cantidad: number,
+  costoTotal: number | null,
+  costoUnitario: number | null,
+  productoId: number
+}
+interface CreateMovementData {
+  movimientos: MovementData[],
+  tipoMovimientoId:number
+}
+
 enum BackendRoute {
   CATEGORY = "Categoria",
   PRODUCT = "Producto",
@@ -59,6 +70,17 @@ class GeneralService extends BackendService {
   }
 
   /* MOVEMENTS */
+  
+  async createMovements({movimientos,tipoMovimientoId}: CreateMovementData) {
+    const body = {movimientos,tipoMovimientoId}
+    return await super.postQuery<{ data: any }>({
+      hasToken: true,
+      path: `${BackendRoute.MOVEMENT}/registrarMovimientos`,
+      body
+    });
+  }
+
+
 
   async getMovementReport() {
     return await super.getQuery<{ data: any }>({
