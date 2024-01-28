@@ -37,18 +37,17 @@ const columns = [
     key: "precio",
     label: "Precio",
   },
-  {
-    key: "id",
-    label: "Acciones",
-  },
+  // {
+  // key: "id",
+  //   label: "Acciones",
+  // },
 ];
-
 
 export const CreateMovementsPage: React.FC = () => {
   const { movementTypes } = useGetMovementTypes();
   const { products } = useGetProducts();
 
-  const [movementType, setMovementType] = useState<IMovementType | null>(null);
+  const [selectedMovementType, setSelectedMovementType] = useState<IMovementType | null>(null);
 
   const [filterValue, setFilterValue] = useState("");
 
@@ -62,13 +61,10 @@ export const CreateMovementsPage: React.FC = () => {
 
   const hasSearchFilter = Boolean(filterValue);
 
-
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "name",
     direction: "ascending",
   });
-
-  
 
   const filteredItems = useMemo(() => {
     let filteredProducts = [...products];
@@ -116,10 +112,21 @@ export const CreateMovementsPage: React.FC = () => {
     setPage(1);
   }, []);
 
-  const onRowsPerPageChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    setRowsPerPage(Number(e.target.value));
-    setPage(1);
-  }, []);
+  const onRowsPerPageChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setRowsPerPage(Number(e.target.value));
+      setPage(1);
+    },
+    []
+  );
+
+  const handleSelectMovementType = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const value = +e.target.value;
+    const selectedMovementType = movementTypes.find(({ id }) => id === value);
+    setSelectedMovementType(selectedMovementType!);
+  };
 
   const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -138,6 +145,7 @@ export const CreateMovementsPage: React.FC = () => {
     });
   }, [sortDescriptor, items]);
 
+
   const topContent = useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
@@ -151,11 +159,26 @@ export const CreateMovementsPage: React.FC = () => {
             onClear={() => onClear()}
             onValueChange={onSearchChange}
           />
+
+          <Select
+            onChange={handleSelectMovementType}
+            className="w-48"
+            label="Tipo de movimiento"
+          >
+            {movementTypes.map((e) => (
+              <SelectItem key={e.id} value={e.id}>
+                {e.nombre}
+              </SelectItem>
+            ))}
+          </Select>
         </div>
+        <Divider />
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">Total {products.length} users</span>
+          <span className="text-default-400 text-small">
+            {products.length} productos en total
+          </span>
           <label className="flex items-center text-default-400 text-small">
-            Rows per page:
+            Filas por página:
             <select
               className="bg-transparent outline-none text-default-400 text-small"
               onChange={onRowsPerPageChange}
@@ -182,8 +205,8 @@ export const CreateMovementsPage: React.FC = () => {
       <div className="py-2 px-2 flex justify-between items-center">
         <span className="w-[30%] text-small text-default-400">
           {selectedKeys === "all"
-            ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
+            ? "Todos los productos seleccionados"
+            : `${selectedKeys.size} de ${filteredItems.length} seleccionados`}
         </span>
         <Pagination
           isCompact
@@ -201,7 +224,7 @@ export const CreateMovementsPage: React.FC = () => {
             variant="flat"
             onPress={onPreviousPage}
           >
-            Previous
+            Anterior
           </Button>
           <Button
             isDisabled={pages === 1}
@@ -209,26 +232,26 @@ export const CreateMovementsPage: React.FC = () => {
             variant="flat"
             onPress={onNextPage}
           >
-            Next
+            Siguiente
           </Button>
         </div>
       </div>
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
+  const continueMovement = () => {
+    const selectedMovements = products.filter((item) =>
+      selectedKeys.has(item.id.toString())
+    );
+  };
+
   return (
-    <div className="p-4">
-      <div className="py-10">
-        <h1>Crear movimiento</h1>
+    <div className="py-4 px-4 md:px-8 lg:px-16">
+      <div className="py-4 ">
+        <h1>
+         Crear movimiento
+        </h1>
       </div>
-      <Select className="w-48" label="Tipo de movimiento">
-        {movementTypes.map((e) => (
-          <SelectItem key={e.id} value={e.id}>
-            {e.nombre}
-          </SelectItem>
-        ))}
-      </Select>
-      <Divider className="my-4" />
       <div>
         <Table
           aria-label="Example table with custom cells, pagination and sorting"
@@ -248,23 +271,31 @@ export const CreateMovementsPage: React.FC = () => {
         >
           <TableHeader columns={columns}>
             {(column) => (
-              <TableColumn
-                key={column.key}
-              >
-                {column.label}
-              </TableColumn>
+              <TableColumn key={column.key}>{column.label}</TableColumn>
             )}
           </TableHeader>
-          <TableBody emptyContent={"Productos no encontrados"} items={sortedItems}>
+          <TableBody
+            emptyContent={"Productos no encontrados"}
+            items={sortedItems}
+          >
             {(item) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
-                <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+                  <TableCell>{getKeyValue(item, columnKey)}</TableCell>
                 )}
               </TableRow>
             )}
           </TableBody>
         </Table>
+        <Divider className="mb-2" />
+        <div className="flex justify-between items-center gap-4">
+        <p className="text-foreground-400">
+          Debes seleccionar el tipo de movimiento y los productos para continuar
+          </p>
+          <Button isDisabled={!selectedMovementType} onClick={continueMovement} color="success" size="md">
+            Continuar
+          </Button>
+        </div>
       </div>
     </div>
   );
