@@ -1,6 +1,10 @@
 import {
   Button,
   Divider,
+  Input,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Select,
   SelectItem,
   Spinner,
@@ -10,33 +14,30 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-  Tooltip,
-  useDisclosure,
+  Textarea,
 } from "@nextui-org/react";
-import { CreateMovementsPage } from "./CreateMovementPage";
-//import { useGetMovements } from "../../hooks";
-import { Icon } from "@iconify/react";
 import { Icons, NavigateRoutes } from "../../enums";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGetReports } from "../../hooks";
 import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
 import toast from "react-hot-toast";
+import { IMovementsInform } from "../../interfaces";
+import dayjs from "dayjs";
 
-/*const {products,
-  isLoading,
-  error,
-  getProducts } = useGetMovements();
-*/
 const columns = [
   {
     key: "id",
-    label: "Número de factura",
+    label: "# Factura",
   },
+  { key: "fecha", label: "Fecha" },
   {
-    key: "productos",
-    label: "productos",
+    key: "product",
+    label: "Producto",
   },
+  { key: "cantidad", label: "Cantidad" },
+  { key: "costoUnitario", label: "Costo unitario" },
+  { key: "costoTotal", label: "Costo total" },
 ];
 const movimientos = [
   {
@@ -94,12 +95,11 @@ export const MovementsManagePage: React.FC = () => {
     getSalesCostReport,
   } = useGetReports();
 
-
   console.log({
     movementReport: movementReport.data,
     salesCostReport: salesCostReport.data,
     salesReport: salesReport.data,
-  })
+  });
 
   const [informType, setInformType] = useState<InformType | null>(null);
 
@@ -154,6 +154,62 @@ export const MovementsManagePage: React.FC = () => {
       }
     }
   };
+
+  const renderCell = useCallback((movement: any, columnKey: any) => {
+    const cellValue = movement[columnKey];
+
+    const { producto } = movement as IMovementsInform;
+
+    switch (columnKey) {
+      case "fecha":
+        return dayjs(cellValue).format("DD/MM/YYYY hh:mm A");
+      case "product":
+        return (
+          <Popover showArrow offset={10} placement="bottom" backdrop={"opaque"}>
+            <PopoverTrigger>
+              <Button variant="flat" className="capitalize">
+                {producto.nombre}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[240px]">
+              {(titleProps) => (
+                <div className="px-1 py-2 w-full">
+                  <p
+                    className="text-small font-bold text-foreground capitalize"
+                    {...titleProps}
+                  >
+                    {producto.nombre}
+                  </p>
+                  <div className="mt-2 flex flex-col gap-2 w-full">
+                    <Input
+                      isDisabled
+                      label="Categoria"
+                      size="sm"
+                      value={"" + producto.categoria.nombre}
+                    />
+                    <Input
+                      isDisabled
+                      label="Precio"
+                      size="sm"
+                      value={"" + producto.precio}
+                      startContent="$"
+                    />
+                    <Textarea
+                      isDisabled
+                      label="Descripción"
+                      value={producto.descripcion}
+                      size="sm"
+                    />
+                  </div>
+                </div>
+              )}
+            </PopoverContent>
+          </Popover>
+        );
+      default:
+        return cellValue;
+    }
+  }, []);
 
   return (
     <div>
@@ -210,32 +266,31 @@ export const MovementsManagePage: React.FC = () => {
                 ) : movementReport.error ? (
                   <p>error</p>
                 ) : (
-                  JSON.stringify(movementReport.data)
+                  <Table>
+                    <TableHeader columns={columns}>
+                      {(column) => (
+                        <TableColumn key={column.key}>
+                          {column.label}
+                        </TableColumn>
+                      )}
+                    </TableHeader>
+                    <TableBody
+                      emptyContent={"Productos no encontrados"}
+                      items={movementReport.data}
+                    >
+                      {(item) => (
+                        <TableRow key={item.id}>
+                          {(columnKey) => (
+                            <TableCell>{renderCell(item, columnKey)}</TableCell>
+                          )}
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
                 )}
               </>
             ) : null
           ) : null}
-
-          {/*     <Table>
-            <TableHeader>
-              <TableColumn>Numero de Facturas</TableColumn>
-              <TableColumn>Productos</TableColumn>
-            </TableHeader>
-            <TableBody>
-              <TableRow key="1">
-                <TableCell>#40042</TableCell>
-                <TableCell>Pan de jamonn y queso </TableCell>
-              </TableRow>
-              <TableRow key="2">
-                <TableCell> </TableCell>
-                <TableCell>Pan de cascarita</TableCell>
-              </TableRow>
-              <TableRow key="2">
-                <TableCell> </TableCell>
-                <TableCell>Pan de dulce</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table> */}
         </div>
       </div>
     </div>

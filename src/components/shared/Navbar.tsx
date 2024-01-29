@@ -104,7 +104,7 @@ export const Navbar: React.FC = () => {
           )}
         </Accordion>
 
-        <NavbarMenuItem onClick={() => handleNavigate(NavigateRoutes.LOGIN)}>
+        <NavbarMenuItem className="px-3 pt-3" onClick={() => handleNavigate(NavigateRoutes.LOGIN)}>
           <span className={`text-danger cursor-pointer`}>Cerrar sesión</span>
         </NavbarMenuItem>
       </NavbarMenu>

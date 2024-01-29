@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { IProduct } from "../interfaces";
+import { IMovementsInform, IProduct } from "../interfaces";
 import toast from "react-hot-toast";
 import { generalService } from "../services";
+import { INFORM_MOVEMENTS } from "../constants/inform-movements.constant";
 
 export const useGetReports = () => {
   const [movementReport, setMovementReport] = useState<{
-    data: any;
+    data: IMovementsInform[] ;
     isLoading: boolean;
     error: string | null;
-  }>({ data: null, isLoading: false, error: null });
+  }>({ data: [], isLoading: false, error: null });
   const [salesReport, setSalesReport] = useState<{
     data: any;
     isLoading: boolean;
@@ -27,16 +28,26 @@ export const useGetReports = () => {
         startDate,
         endDate
       );
-      setMovementReport({ data: response.data, isLoading: false, error: null });
+      //! QUITAR CONSTANTE
+      setMovementReport({
+        data: INFORM_MOVEMENTS as IMovementsInform[],
+        isLoading: false,
+        error: null,
+      });
+      //setMovementReport({ data: response.data, isLoading: false, error: null });
     } catch (error: any) {
-      setMovementReport({ data: null, isLoading: false, error: error.message });
+      setMovementReport({ data: [], isLoading: false, error: error.message });
     }
   };
 
   const getSalesReport = async (startDate?: string, endDate?: string) => {
     setSalesReport((prevState) => ({ ...prevState, isLoading: true }));
     try {
-      const response = await generalService.getSalesReportDate(startDate, endDate);
+      const response = await generalService.getSalesReportDate(
+        startDate,
+        endDate
+      );
+
       setSalesReport({ data: response.data, isLoading: false, error: null });
     } catch (error: any) {
       setSalesReport({ data: null, isLoading: false, error: error.message });
