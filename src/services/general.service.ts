@@ -4,6 +4,7 @@ import {
   CreateProductData,
   ICategory,
   IMovementType,
+  IMovementsInform,
   IProduct,
 } from "../interfaces";
 
@@ -94,7 +95,7 @@ class GeneralService extends BackendService {
   }
 
   async getMovementReport(fechaInicio?: string, fechaFin?: string) {
-    return await super.getQuery<{ data: any }>({
+    return await super.getQuery<{ data: IMovementsInform }>({
       hasToken: true,
       path: `${BackendRoute.MOVEMENT}/reporteMovimientos`,
       params: { fechaInicio, fechaFin },
