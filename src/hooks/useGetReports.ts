@@ -4,47 +4,69 @@ import toast from "react-hot-toast";
 import { generalService } from "../services";
 
 export const useGetReports = () => {
-  const [movementReport, setMovementReport] = useState<[]>([]);
-  const [salesReport, setSalesReport] = useState<any>();
-  const [salesCostReport, setSalesCostReport] = useState<any>();
+  const [movementReport, setMovementReport] = useState<{
+    data: any;
+    isLoading: boolean;
+    error: string | null;
+  }>({ data: null, isLoading: false, error: null });
+  const [salesReport, setSalesReport] = useState<{
+    data: any;
+    isLoading: boolean;
+    error: string | null;
+  }>({ data: null, isLoading: false, error: null });
+  const [salesCostReport, setSalesCostReport] = useState<{
+    data: any;
+    isLoading: boolean;
+    error: string | null;
+  }>({ data: null, isLoading: false, error: null });
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const getData = async () => {
-    setIsLoading(true);
-    setError(null);
+  const getMovementReport = async (startDate?: string, endDate?: string) => {
+    setMovementReport((prevState) => ({ ...prevState, isLoading: true }));
     try {
-      const [movementReport, salesReport, salesCostReport] = await Promise.all([
-        generalService.getMovementReport(),
-        generalService.getSalesReport(),
-        generalService.getSalesCostReport(),
-      ]);
-      setMovementReport(movementReport.data);
-      setSalesReport(salesReport.data);
-      setSalesCostReport(salesCostReport.data);
+      const response = await generalService.getMovementReport(
+        startDate,
+        endDate
+      );
+      setMovementReport({ data: response.data, isLoading: false, error: null });
     } catch (error: any) {
-      if (error?.status === 403) {
-        setError("No estás autenticado");
-        return toast.error("No estás autenticado");
-      }
-      setError(error?.message);
-      toast.error(error?.message ?? "Ha ocurrido un error");
-    } finally {
-      setIsLoading(false);
+      setMovementReport({ data: null, isLoading: false, error: error.message });
     }
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  const getSalesReport = async (startDate?: string, endDate?: string) => {
+    setSalesReport((prevState) => ({ ...prevState, isLoading: true }));
+    try {
+      const response = await generalService.getSalesReportDate(startDate, endDate);
+      setSalesReport({ data: response.data, isLoading: false, error: null });
+    } catch (error: any) {
+      setSalesReport({ data: null, isLoading: false, error: error.message });
+    }
+  };
+
+  const getSalesCostReport = async () => {
+    setSalesCostReport((prevState) => ({ ...prevState, isLoading: true }));
+    try {
+      const response = await generalService.getSalesCostReport();
+      setSalesCostReport({
+        data: response.data,
+        isLoading: false,
+        error: null,
+      });
+    } catch (error: any) {
+      setSalesCostReport({
+        data: null,
+        isLoading: false,
+        error: error.message,
+      });
+    }
+  };
 
   return {
-    isLoading,
-    error,
-    getData,
     movementReport,
     salesReport,
     salesCostReport,
+    getMovementReport,
+    getSalesCostReport,
+    getSalesReport,
   };
 };
