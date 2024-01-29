@@ -19,3 +19,10 @@ export interface CreateProductData {
   costoUnitario: number | null;
   costoTotal: number | null;
 }
+
+export interface EditProductData {
+  descripcion: string;
+  nombre: string;
+  precio: number;
+  categoriaId: number;
+}

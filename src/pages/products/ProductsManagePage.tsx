@@ -59,6 +59,8 @@ export const ProductsManagePage: React.FC = () => {
     onOpen: onOpenDeleteConfirm,
   } = useDisclosure();
 
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+
   const { products, isLoading, error, getProducts } = useGetProducts();
 
   const [currentProduct, setCurrentProduct] = useState<IProduct | null>(null);
@@ -246,17 +248,33 @@ export const ProductsManagePage: React.FC = () => {
     switch (columnKey) {
       case "id":
         return (
-          <div className="relative flex items-center gap-2">
-            <Tooltip content="Details">
+          <div className="relative flex items-center justify-end gap-2">
+            {/*         
+    <Tooltip content="Details">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <Icon icon={Icons.SHOW} />
               </span>
             </Tooltip>
-            <Tooltip content="Edit user" onClick={() => {}}>
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <Tooltip
+              content="Editar producto"
+              onClick={() => {
+                setCurrentProduct(product);
+                onOpenCreateModal();
+                setIsEditing(true);
+              }}
+            >
+              <span
+                className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                onClick={() => {
+                  setCurrentProduct(product);
+                  onOpenCreateModal();
+                  setIsEditing(true);
+                }}
+              >
                 <Icon icon={Icons.EDIT} />
               </span>
-            </Tooltip>
+            </Tooltip> 
+            */}
             <Tooltip
               color="danger"
               content="Eliminar producto"
@@ -290,8 +308,13 @@ export const ProductsManagePage: React.FC = () => {
     <>
       <CreateProductModal
         isOpen={isOpenCreateModal}
-        onOpenChange={onOpenChangeCreateModal}
+        onOpenChange={() => {
+          setIsEditing(false);
+          onOpenChangeCreateModal();
+        }}
         getProducts={getProducts}
+        product={currentProduct}
+        isEditing={isEditing}
       />
       <ConfirmModal
         isOpen={isOpenDeleteConfirm}

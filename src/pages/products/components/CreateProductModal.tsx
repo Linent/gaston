@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler, RegisterOptions } from "react-hook-form";
 import {
   Modal,
@@ -16,12 +16,18 @@ import toast from "react-hot-toast";
 
 import { generalService } from "../../../services";
 import { useGetCategories } from "../../../hooks";
-import { CreateProductData } from "../../../interfaces";
+import {
+  CreateProductData,
+  EditProductData,
+  IProduct,
+} from "../../../interfaces";
 
 interface Props {
   isOpen: boolean;
   onOpenChange: () => void;
   getProducts: () => void;
+  isEditing?: boolean;
+  product?: IProduct | null;
 }
 
 enum FormKeys {
@@ -99,18 +105,45 @@ export const CreateProductModal: React.FC<Props> = ({
   isOpen,
   onOpenChange,
   getProducts,
+  isEditing = false,
+  product,
 }) => {
-
-
-  const {categories} = useGetCategories()
-
-
+  const { categories } = useGetCategories();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
+    setValue,
   } = useForm<FormData>();
+
+  useEffect(() => {
+   /*  if (isEditing && product) {
+      setTimeout(() => {
+        console.log("aaa");
+        setValue(FormKeys.CATEGORIA_ID, product?.categoriaId);
+        setValue(FormKeys.DESCRIPCION, product?.descripcion);
+        setValue(FormKeys.NOMBRE, product?.nombre);
+        setValue(FormKeys.PRECIO, product?.precio);
+      }, 100);
+    } */
+  }, [product, isEditing]);
+
+  const handleCreateProduct = async (data: CreateProductData) => {
+    try {
+      await generalService.createProduct(data);
+      onOpenChange();
+      getProducts();
+      reset();
+      toast.success("Producto creado con exito");
+    } catch (error: any) {
+      console.log(error);
+      toast.error("Ha ocurrido un error, revisa los campos");
+    }
+  };
+
+  const handleEditProduct = async (data: EditProductData) => {};
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     const { categoriaId, cantidadInicial, precio, costoTotal, costoUnitario } =
@@ -119,138 +152,147 @@ export const CreateProductModal: React.FC<Props> = ({
     data[FormKeys.CANTIDAD_INICIAL] = +cantidadInicial!;
     data[FormKeys.PRECIO] = +precio!;
 
-    if ([costoTotal, costoUnitario].every((e) => !e)) {
+    if (!isEditing && [costoTotal, costoUnitario].every((e) => !e)) {
       return toast.error("Llena al menos un costo");
     }
 
-    data[FormKeys.COSTO_UNITARIO] = costoUnitario ? +costoUnitario! : null;
-    data[FormKeys.COSTO_TOTAL] = costoTotal ? +costoTotal! : null;
-
-    try {
-      await generalService.createProduct(
-        data as CreateProductData
-      );
-      onOpenChange();
-      getProducts();
-      toast.success("Producto creado con exito");
-    } catch (error: any) {
-      console.log(error);
-      toast.error("Ha ocurrido un error, revisa los campos");
+    if (!isEditing) {
+      data[FormKeys.COSTO_UNITARIO] = costoUnitario ? +costoUnitario! : null;
+      data[FormKeys.COSTO_TOTAL] = costoTotal ? +costoTotal! : null;
     }
+
+    if (isEditing) return await handleEditProduct(data as EditProductData);
+    await handleCreateProduct(data as CreateProductData);
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader className="flex flex-col gap-1">
-              Crear Producto
-            </ModalHeader>
-            <ModalBody>
-              <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
-                <Input
-                  isRequired
-                  label="Nombre"
-                  errorMessage={errors[FormKeys.NOMBRE]?.message}
-                  {...register(FormKeys.NOMBRE, validator[FormKeys.NOMBRE])}
-                />
+    <>
+      <div className="p-4 bg-black">{}</div>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Crear Producto
+              </ModalHeader>
+              <ModalBody>
+                <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+                  <Input
+                    isRequired
+                    label="Nombre"
+                    errorMessage={errors[FormKeys.NOMBRE]?.message}
+                    {...register(FormKeys.NOMBRE, validator[FormKeys.NOMBRE])}
+                  />
 
-                <Select
-                  label="Categoría"
-                  errorMessage={errors[FormKeys.CATEGORIA_ID]?.message}
-                  {...register(
-                    FormKeys.CATEGORIA_ID,
-                    validator[FormKeys.CATEGORIA_ID]
+                  <Select
+                    label="Categoría"
+                    errorMessage={errors[FormKeys.CATEGORIA_ID]?.message}
+                    {...register(
+                      FormKeys.CATEGORIA_ID,
+                      validator[FormKeys.CATEGORIA_ID]
+                    )}
+                  >
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.nombre}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                  <div className="flex gap-4">
+                    <Input
+                      isRequired
+                      type="number"
+                      label="Precio de venta"
+                      errorMessage={errors[FormKeys.PRECIO]?.message}
+                      startContent={
+                        <div className="pointer-events-none flex items-center">
+                          <span className="text-default-400 text-small">$</span>
+                        </div>
+                      }
+                      {...register(FormKeys.PRECIO, validator[FormKeys.PRECIO])}
+                    />
+
+                    {isEditing ? null : (
+                      <Input
+                        isRequired
+                        type="number"
+                        label="Cantidad Inicial"
+                        errorMessage={
+                          errors[FormKeys.CANTIDAD_INICIAL]?.message
+                        }
+                        {...register(
+                          FormKeys.CANTIDAD_INICIAL,
+                          validator[FormKeys.CANTIDAD_INICIAL]
+                        )}
+                      />
+                    )}
+                  </div>
+
+                  {isEditing ? null : (
+                    <div className="flex gap-4">
+                      <Input
+                        type="number"
+                        label="Costo unitario"
+                        description="Llena al menos un costo"
+                        errorMessage={errors[FormKeys.COSTO_UNITARIO]?.message}
+                        startContent={
+                          <div className="pointer-events-none flex items-center">
+                            <span className="text-default-400 text-small">
+                              $
+                            </span>
+                          </div>
+                        }
+                        {...register(
+                          FormKeys.COSTO_UNITARIO,
+                          validator[FormKeys.COSTO_UNITARIO]
+                        )}
+                      />
+
+                      <Input
+                        type="number"
+                        label="Costo total"
+                        errorMessage={errors[FormKeys.COSTO_TOTAL]?.message}
+                        startContent={
+                          <div className="pointer-events-none flex items-center">
+                            <span className="text-default-400 text-small">
+                              $
+                            </span>
+                          </div>
+                        }
+                        {...register(
+                          FormKeys.COSTO_TOTAL,
+                          validator[FormKeys.COSTO_TOTAL]
+                        )}
+                      />
+                    </div>
                   )}
+
+                  <Textarea
+                    isRequired
+                    label="Descripción"
+                    errorMessage={errors[FormKeys.DESCRIPCION]?.message}
+                    {...register(
+                      FormKeys.DESCRIPCION,
+                      validator[FormKeys.DESCRIPCION]
+                    )}
+                  />
+                </form>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Cancelar
+                </Button>
+                <Button
+                  color="success"
+                  onPress={() => handleSubmit(onSubmit)()}
                 >
-                  {categories.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      {category.nombre}
-                    </SelectItem>
-                  ))}
-                </Select>
-                <div className="flex gap-4">
-                  <Input
-                    isRequired
-                    type="number"
-                    label="Precio de venta"
-                    errorMessage={errors[FormKeys.PRECIO]?.message}
-                    startContent={
-                      <div className="pointer-events-none flex items-center">
-                        <span className="text-default-400 text-small">$</span>
-                      </div>
-                    }
-                    {...register(FormKeys.PRECIO, validator[FormKeys.PRECIO])}
-                  />
-
-                  <Input
-                    isRequired
-                    type="number"
-                    label="Cantidad Inicial"
-                    errorMessage={errors[FormKeys.CANTIDAD_INICIAL]?.message}
-                    {...register(
-                      FormKeys.CANTIDAD_INICIAL,
-                      validator[FormKeys.CANTIDAD_INICIAL]
-                    )}
-                  />
-                </div>
-
-                <div className="flex gap-4">
-                  <Input
-                    type="number"
-                    label="Costo unitario"
-                    description="Llena al menos un costo"
-                    errorMessage={errors[FormKeys.COSTO_UNITARIO]?.message}
-                    startContent={
-                      <div className="pointer-events-none flex items-center">
-                        <span className="text-default-400 text-small">$</span>
-                      </div>
-                    }
-                    {...register(
-                      FormKeys.COSTO_UNITARIO,
-                      validator[FormKeys.COSTO_UNITARIO]
-                    )}
-                  />
-
-                  <Input
-                    type="number"
-                    label="Costo total"
-                    errorMessage={errors[FormKeys.COSTO_TOTAL]?.message}
-                    startContent={
-                      <div className="pointer-events-none flex items-center">
-                        <span className="text-default-400 text-small">$</span>
-                      </div>
-                    }
-                    {...register(
-                      FormKeys.COSTO_TOTAL,
-                      validator[FormKeys.COSTO_TOTAL]
-                    )}
-                  />
-                </div>
-
-                <Textarea
-                  isRequired
-                  label="Descripción"
-                  errorMessage={errors[FormKeys.DESCRIPCION]?.message}
-                  {...register(
-                    FormKeys.DESCRIPCION,
-                    validator[FormKeys.DESCRIPCION]
-                  )}
-                />
-              </form>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
-                Cancelar
-              </Button>
-              <Button color="success" onPress={() => handleSubmit(onSubmit)()}>
-                Crear
-              </Button>
-            </ModalFooter>
-          </>
-        )}
-      </ModalContent>
-    </Modal>
+                  Crear
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
