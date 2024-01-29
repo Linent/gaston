@@ -3,6 +3,7 @@ import { IMovementsInform, IProduct } from "../interfaces";
 import toast from "react-hot-toast";
 import { generalService } from "../services";
 import { INFORM_MOVEMENTS } from "../constants/inform-movements.constant";
+import { CostReport } from '../interfaces/inform.interface';
 
 export const useGetReports = () => {
   const [movementReport, setMovementReport] = useState<{
@@ -14,9 +15,9 @@ export const useGetReports = () => {
     data: any;
     isLoading: boolean;
     error: string | null;
-  }>({ data: null, isLoading: false, error: null });
+  }>({ data:  null, isLoading: false, error: null });
   const [salesCostReport, setSalesCostReport] = useState<{
-    data: any;
+    data: CostReport | null;
     isLoading: boolean;
     error: string | null;
   }>({ data: null, isLoading: false, error: null });

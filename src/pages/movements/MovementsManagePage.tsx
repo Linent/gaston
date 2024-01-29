@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useGetReports } from "../../hooks";
 import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
 import toast from "react-hot-toast";
-import { MovementReport } from "./components";
+import { CostReportComponent, MovementReport } from "./components";
 import { IProduct } from "../../interfaces";
 import { ModalSelectProduct } from "./components/ModalSelectProduct";
 
@@ -204,15 +204,9 @@ export const MovementsManagePage: React.FC = () => {
         <div className="py-4">
           {generateInformIsClicked ? (
             informType?.id === InformTypes.MOVEMENTS ? (
-              <>
-                {movementReport.isLoading ? (
-                  <Spinner />
-                ) : movementReport.error ? (
-                  <p>error</p>
-                ) : (
-                  <MovementReport movementReport={movementReport} />
-                )}
-              </>
+              <MovementReport movementReport={movementReport} />
+            ) : informType?.id === InformTypes.SALES_COST ? (
+              <CostReportComponent salesCostReport={salesCostReport} />
             ) : null
           ) : null}
         </div>

@@ -1,6 +1,7 @@
 import BackendService from "./BackendService";
 
 import {
+  CostReport,
   CreateProductData,
   ICategory,
   IMovementType,
@@ -112,7 +113,7 @@ class GeneralService extends BackendService {
   }
 
   async getSalesCostReport(productId: string | number) {
-    return await super.getQuery<{ data: any }>({
+    return await super.getQuery<{ data: CostReport }>({
       hasToken: true,
       path: `${BackendRoute.MOVEMENT}/reporteVentasXcosto`,
       params: {productoId: productId}
