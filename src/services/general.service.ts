@@ -29,6 +29,7 @@ enum BackendRoute {
   MOVEMENT = "Movimiento",
   TOKEN = "token",
   MOVEMENT_TYPE = "TipoMovimiento",
+  SALES = "Venta",
 }
 
 class GeneralService extends BackendService {
@@ -92,10 +93,11 @@ class GeneralService extends BackendService {
     });
   }
 
-  async getMovementReport() {
+  async getMovementReport(fechaInicio?: string, fechaFin?: string) {
     return await super.getQuery<{ data: any }>({
       hasToken: true,
       path: `${BackendRoute.MOVEMENT}/reporteMovimientos`,
+      params: { fechaInicio, fechaFin },
     });
   }
 
@@ -119,6 +121,16 @@ class GeneralService extends BackendService {
     return await super.getQuery<{ data: IMovementType[] }>({
       hasToken: true,
       path: BackendRoute.MOVEMENT_TYPE,
+    });
+  }
+
+  /* VENTAS */
+
+  async getSalesReportDate(fechaInicio?: string, fechaFin?: string) {
+    return await super.getQuery<{ data: IMovementType[] }>({
+      hasToken: true,
+      path: BackendRoute.SALES,
+      params: { fechaInicio, fechaFin },
     });
   }
 }
