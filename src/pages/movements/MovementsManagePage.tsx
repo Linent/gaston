@@ -225,33 +225,7 @@ export const MovementsManagePage: React.FC = () => {
             ) : null
           ) : null}
 
-          {/*     <Table>
-            <TableHeader>
-            
-            {columns.map((column) => (
-              <TableColumn key={column.key}>
-                {column.label}
-                </TableColumn>
-            ))}
-  
-            </TableHeader>
-            <TableBody>
-              <TableRow >
-                <TableCell>
-                a
-                  </TableCell>
-                  <TableCell>
-                a
-                  </TableCell>
-                  <TableCell>
-                a
-                  </TableCell>
-                  <TableCell>
-                a
-                  </TableCell>
-                </TableRow>
-            </TableBody>
-          </Table> */}
+          
         </div>
       </div>
     </div>
