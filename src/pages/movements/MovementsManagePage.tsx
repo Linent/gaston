@@ -24,13 +24,22 @@ import { useGetReports } from "../../hooks";
 */
 const columns = [
   {
-    key: "id",
-    label: "Número de factura",
+    key: "productoId",
+    label: "Numero de productos",
+    
   },
   {
-    key: "productos",
-    label: "productos",
+    key: "cantidad",
+    label: "cantidad",
   },
+  {
+    key:'costoTotal',
+    label: 'costo Total'
+  },
+  {
+    key:'costoUnitario',
+    label: 'Costo Unitario',
+  }
 ];
 const movimientos = [
   {
@@ -70,22 +79,29 @@ export const MovementsManagePage: React.FC = () => {
         <div className="p-10">
           <Table>
             <TableHeader>
-              <TableColumn>Numero de Facturas</TableColumn>
-              <TableColumn>Productos</TableColumn>
+            
+            {columns.map((column) => (
+              <TableColumn key={column.key}>
+                {column.label}
+                </TableColumn>
+            ))}
+  
             </TableHeader>
             <TableBody>
-              <TableRow key="1">
-                <TableCell>#40042</TableCell>
-                <TableCell>Pan de jamonn y queso </TableCell>
-              </TableRow>
-              <TableRow key="2">
-                <TableCell> </TableCell>
-                <TableCell>Pan de cascarita</TableCell>
-              </TableRow>
-              <TableRow key="2">
-                <TableCell> </TableCell>
-                <TableCell>Pan de dulce</TableCell>
-              </TableRow>
+              <TableRow >
+                <TableCell>
+                a
+                  </TableCell>
+                  <TableCell>
+                a
+                  </TableCell>
+                  <TableCell>
+                a
+                  </TableCell>
+                  <TableCell>
+                a
+                  </TableCell>
+                </TableRow>
             </TableBody>
           </Table>
         </div>
