@@ -60,13 +60,29 @@ export const SalesReportComponent: React.FC<Props> = ({ salesReport }) => {
 
   return (
     <div>
+      <div className="grid sm:grid-cols-2 pb-6">
+        <p
+          className={`text-xl font-semibold ${
+            totalIngresos > 0
+              ? "text-green-500"
+              : totalIngresos < 0
+              ? "text-red-500"
+              : null
+          }`}
+        >
+          Total de ingresos: ${totalIngresos}
+        </p>
+        <p className="text-xl font-semibold">
+          Total de productos vendidos: {totalProductosVendidos}
+        </p>
+      </div>
       <Table>
         <TableHeader columns={columns}>
           {(column) => (
             <TableColumn key={column.key}>{column.label}</TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"Productos no encontrados"} items={salesInfo}>
+        <TableBody emptyContent={"No hay ventas"} items={salesInfo}>
           {(item) => (
             <TableRow key={Math.random()}>
               {(columnKey) => (
