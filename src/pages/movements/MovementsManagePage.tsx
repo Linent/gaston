@@ -85,7 +85,21 @@ export const MovementsManagePage: React.FC = () => {
   const handleNavigateCreateMovements = () =>
     navigate(NavigateRoutes.CREATE_MOVEMENT);
 
-  const { movementReport, getMovementReport } = useGetReports();
+  const {
+    movementReport,
+    salesCostReport,
+    salesReport,
+    getMovementReport,
+    getSalesReport,
+    getSalesCostReport,
+  } = useGetReports();
+
+
+  console.log({
+    movementReport: movementReport.data,
+    salesCostReport: salesCostReport.data,
+    salesReport: salesReport.data,
+  })
 
   const [informType, setInformType] = useState<InformType | null>(null);
 
@@ -93,8 +107,8 @@ export const MovementsManagePage: React.FC = () => {
     useState<boolean>(false);
 
   const [date, setDate] = useState<DateValueType>({
-    startDate: new Date(),
-    endDate: new Date().setMonth(11).toString(),
+    startDate: null,
+    endDate: null,
   });
 
   const handleValueChange = (
@@ -116,17 +130,22 @@ export const MovementsManagePage: React.FC = () => {
 
   const handleGenerateInform = async () => {
     setGenerateInformIsClicked(true);
-    const {startDate,endDate } = date || {};
-    
+
+    const startDate = new Date(date?.startDate!).toDateString();
+    const endDate = new Date(date?.endDate!).toDateString();
+
     switch (informType?.id) {
       case InformTypes.SALES_COST: {
-        await getMovementReport(startDate,endDate );
+        await getSalesCostReport();
         break;
       }
       case InformTypes.MOVEMENTS: {
+        await getMovementReport(startDate, endDate);
         break;
       }
       case InformTypes.SALES: {
+        await getSalesReport(startDate, endDate);
+
         break;
       }
       default: {
@@ -191,7 +210,7 @@ export const MovementsManagePage: React.FC = () => {
                 ) : movementReport.error ? (
                   <p>error</p>
                 ) : (
-                  JSON.parse(movementReport.data)
+                  JSON.stringify(movementReport.data)
                 )}
               </>
             ) : null
