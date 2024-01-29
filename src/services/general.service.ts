@@ -111,11 +111,11 @@ class GeneralService extends BackendService {
     });
   }
 
-  async getSalesCostReport() {
+  async getSalesCostReport(productId: string | number) {
     return await super.getQuery<{ data: any }>({
       hasToken: true,
       path: `${BackendRoute.MOVEMENT}/reporteVentasXcosto`,
-      params: {productoId: 9}
+      params: {productoId: productId}
     });
   }
 

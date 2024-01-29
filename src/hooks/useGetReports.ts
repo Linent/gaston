@@ -54,10 +54,10 @@ export const useGetReports = () => {
     }
   };
 
-  const getSalesCostReport = async () => {
+  const getSalesCostReport = async (productId: string | number) => {
     setSalesCostReport((prevState) => ({ ...prevState, isLoading: true }));
     try {
-      const response = await generalService.getSalesCostReport();
+      const response = await generalService.getSalesCostReport(productId);
       setSalesCostReport({
         data: response.data,
         isLoading: false,

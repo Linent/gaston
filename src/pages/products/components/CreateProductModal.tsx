@@ -119,7 +119,7 @@ export const CreateProductModal: React.FC<Props> = ({
   } = useForm<FormData>();
 
   useEffect(() => {
-   /*  if (isEditing && product) {
+    /*  if (isEditing && product) {
       setTimeout(() => {
         console.log("aaa");
         setValue(FormKeys.CATEGORIA_ID, product?.categoriaId);

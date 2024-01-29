@@ -1,20 +1,10 @@
 import {
   Button,
   Divider,
-  Input,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
   Select,
   SelectItem,
   Spinner,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-  Textarea,
+  useDisclosure,
 } from "@nextui-org/react";
 import { Icons, NavigateRoutes } from "../../enums";
 import React, { useCallback, useState } from "react";
@@ -22,27 +12,10 @@ import { useNavigate } from "react-router-dom";
 import { useGetReports } from "../../hooks";
 import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
 import toast from "react-hot-toast";
-import { IMovementsInform } from "../../interfaces";
-import dayjs from "dayjs";
+import { MovementReport } from "./components";
+import { IProduct } from "../../interfaces";
+import { ModalSelectProduct } from "./components/ModalSelectProduct";
 
-const columns = [
-  {
-    key: "id",
-    label: "# Factura",
-  },
-  {
-    key: "tipoMovimiento",
-    label: "Tipo de movimiento",
-  },
-  { key: "fecha", label: "Fecha" },
-  {
-    key: "product",
-    label: "Producto",
-  },
-  { key: "cantidad", label: "Cantidad" },
-  { key: "costoUnitario", label: "Costo unitario" },
-  { key: "costoTotal", label: "Costo total" },
-];
 const movimientos = [
   {
     cantidad: 10,
@@ -72,7 +45,7 @@ interface InformType {
 const informTypes: InformType[] = [
   {
     id: InformTypes.SALES_COST,
-    label: "Reporte ventas por costo",
+    label: "Reporte ventas por producto",
   },
   {
     id: InformTypes.MOVEMENTS,
@@ -90,6 +63,8 @@ export const MovementsManagePage: React.FC = () => {
   const handleNavigateCreateMovements = () =>
     navigate(NavigateRoutes.CREATE_MOVEMENT);
 
+  const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
+
   const {
     movementReport,
     salesCostReport,
@@ -106,6 +81,8 @@ export const MovementsManagePage: React.FC = () => {
   });
 
   const [informType, setInformType] = useState<InformType | null>(null);
+
+  const [currentProduct, setCurrentProduct] = useState<IProduct | null>(null);
 
   const [generateInformIsClicked, setGenerateInformIsClicked] =
     useState<boolean>(false);
@@ -140,7 +117,7 @@ export const MovementsManagePage: React.FC = () => {
 
     switch (informType?.id) {
       case InformTypes.SALES_COST: {
-        await getSalesCostReport();
+        await getSalesCostReport(currentProduct?.id!);
         break;
       }
       case InformTypes.MOVEMENTS: {
@@ -159,80 +136,14 @@ export const MovementsManagePage: React.FC = () => {
     }
   };
 
-  const renderCell = useCallback((movement: any, columnKey: any) => {
-    const cellValue = movement[columnKey];
-
-    const { producto, tipoMovimiento } = movement as IMovementsInform;
-
-    const nombreTipoMovimiento = tipoMovimiento.nombre;
-
-    switch (columnKey) {
-      case "tipoMovimiento":
-        return (
-          <span
-            className={`capitalize ${
-              nombreTipoMovimiento.toUpperCase() === "VENTA"
-                ? "text-success"
-                : nombreTipoMovimiento.toUpperCase() === "COMPRA"
-                ? "text-danger"
-                : ""
-            }`}
-          >
-            {tipoMovimiento.nombre}
-          </span>
-        );
-      case "fecha":
-        return dayjs(cellValue).format("DD/MM/YYYY hh:mm A");
-      case "product":
-        return (
-          <Popover showArrow offset={10} placement="bottom" backdrop={"opaque"}>
-            <PopoverTrigger>
-              <Button variant="flat" className="capitalize">
-                {producto.nombre}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[240px]">
-              {(titleProps) => (
-                <div className="px-1 py-2 w-full">
-                  <p
-                    className="text-small font-bold text-foreground capitalize"
-                    {...titleProps}
-                  >
-                    {producto.nombre}
-                  </p>
-                  <div className="mt-2 flex flex-col gap-2 w-full">
-                    <Input
-                      isDisabled
-                      label="Categoria"
-                      size="sm"
-                      value={"" + producto.categoria.nombre}
-                    />
-                    <Input
-                      isDisabled
-                      label="Precio"
-                      size="sm"
-                      value={"" + producto.precio}
-                      startContent="$"
-                    />
-                    <Textarea
-                      isDisabled
-                      label="Descripción"
-                      value={producto.descripcion}
-                      size="sm"
-                    />
-                  </div>
-                </div>
-              )}
-            </PopoverContent>
-          </Popover>
-        );
-      default:
-        return cellValue;
-    }
-  }, []);
-
   return (
     <div>
+      <ModalSelectProduct
+        onClose={onClose}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        setCurrentProduct={setCurrentProduct}
+      />
       <div className="p-4">
         <Button onPress={handleNavigateCreateMovements}>
           Crear movimiento
@@ -267,6 +178,10 @@ export const MovementsManagePage: React.FC = () => {
             </div>
           ) : null}
 
+          {informType?.id === InformTypes.SALES_COST ? (
+            <Button onClick={onOpen}>Seleccionar Producto</Button>
+          ) : null}
+
           <Button
             isDisabled={isGenerateInformDisabled}
             color="success"
@@ -279,6 +194,11 @@ export const MovementsManagePage: React.FC = () => {
         <div className="py-4">
           <h1 className="text-3xl font-bold tracking-tight text-white-900">
             {informType?.label}
+
+            {informType?.id === InformTypes.SALES_COST &&
+            currentProduct?.nombre ? (
+              <span className="capitalize">: {currentProduct?.nombre}</span>
+            ) : null}
           </h1>
         </div>
         <div className="py-4">
@@ -290,27 +210,7 @@ export const MovementsManagePage: React.FC = () => {
                 ) : movementReport.error ? (
                   <p>error</p>
                 ) : (
-                  <Table>
-                    <TableHeader columns={columns}>
-                      {(column) => (
-                        <TableColumn key={column.key}>
-                          {column.label}
-                        </TableColumn>
-                      )}
-                    </TableHeader>
-                    <TableBody
-                      emptyContent={"Productos no encontrados"}
-                      items={movementReport.data}
-                    >
-                      {(item) => (
-                        <TableRow key={item.id}>
-                          {(columnKey) => (
-                            <TableCell>{renderCell(item, columnKey)}</TableCell>
-                          )}
-                        </TableRow>
-                      )}
-                    </TableBody>
-                  </Table>
+                  <MovementReport movementReport={movementReport} />
                 )}
               </>
             ) : null
