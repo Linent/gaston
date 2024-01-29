@@ -19,7 +19,7 @@ const PRODUCTS: IRoute = {
       isActive: true,
       showInSidebar: true,
       name: Pages.MANAGE_PRODUCTS,
-      label: "Manejar productos",
+      label: "Gestionar productos",
     },
   ],
 };
@@ -35,7 +35,7 @@ const MOVEMENTS: IRoute = {
       isActive: true,
       showInSidebar: true,
       name: Pages.MANAGE_MOVEMENTS,
-      label: "Manejar movimientos",
+      label: "Gestionar movimientos",
     },
     {
       isActive: true,
