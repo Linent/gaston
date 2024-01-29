@@ -30,6 +30,10 @@ const columns = [
     key: "id",
     label: "# Factura",
   },
+  {
+    key: "tipoMovimiento",
+    label: "Tipo de movimiento",
+  },
   { key: "fecha", label: "Fecha" },
   {
     key: "product",
@@ -158,9 +162,25 @@ export const MovementsManagePage: React.FC = () => {
   const renderCell = useCallback((movement: any, columnKey: any) => {
     const cellValue = movement[columnKey];
 
-    const { producto } = movement as IMovementsInform;
+    const { producto, tipoMovimiento } = movement as IMovementsInform;
+
+    const nombreTipoMovimiento = tipoMovimiento.nombre;
 
     switch (columnKey) {
+      case "tipoMovimiento":
+        return (
+          <span
+            className={`capitalize ${
+              nombreTipoMovimiento.toUpperCase() === "VENTA"
+                ? "text-success"
+                : nombreTipoMovimiento.toUpperCase() === "COMPRA"
+                ? "text-danger"
+                : ""
+            }`}
+          >
+            {tipoMovimiento.nombre}
+          </span>
+        );
       case "fecha":
         return dayjs(cellValue).format("DD/MM/YYYY hh:mm A");
       case "product":
@@ -233,15 +253,19 @@ export const MovementsManagePage: React.FC = () => {
             ))}
           </Select>
 
-          <div className="w-72">
-            <Datepicker
-              primaryColor={"fuchsia"}
-              value={date}
-              onChange={handleValueChange}
-              showShortcuts={true}
-              maxDate={new Date()}
-            />
-          </div>
+          {[InformTypes.SALES, InformTypes.MOVEMENTS].includes(
+            informType?.id!
+          ) ? (
+            <div className="w-72">
+              <Datepicker
+                primaryColor={"fuchsia"}
+                value={date}
+                onChange={handleValueChange}
+                showShortcuts={true}
+                maxDate={new Date()}
+              />
+            </div>
+          ) : null}
 
           <Button
             isDisabled={isGenerateInformDisabled}

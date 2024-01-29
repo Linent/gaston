@@ -29,8 +29,12 @@ export const useGetReports = () => {
         endDate
       );
       //! QUITAR CONSTANTE
-     
-      setMovementReport({ data: response.data, isLoading: false, error: null });
+      setMovementReport({
+        data: INFORM_MOVEMENTS as IMovementsInform[],
+        isLoading: false,
+        error: null,
+      });
+      //setMovementReport({ data: response.data, isLoading: false, error: null });
     } catch (error: any) {
       setMovementReport({ data: [], isLoading: false, error: error.message });
     }
