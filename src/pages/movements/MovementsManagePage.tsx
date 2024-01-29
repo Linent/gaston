@@ -111,7 +111,11 @@ export const MovementsManagePage: React.FC = () => {
     setGenerateInformIsClicked(false);
   };
 
-  const isGenerateInformDisabled = !informType;
+  const isGenerateInformDisabled =
+    !informType ||
+    (informType?.id === InformTypes.SALES_COST && !currentProduct) ||
+    ([InformTypes.SALES, InformTypes.MOVEMENTS].includes(informType?.id!) &&
+      (!date?.startDate || !date?.endDate));
 
   const handleGenerateInform = async () => {
     setGenerateInformIsClicked(true);
