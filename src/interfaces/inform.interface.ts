@@ -42,17 +42,29 @@ export enum Nombre {
 }
 
 export interface CostReport {
-  productosVendidos: { [key: string]: ProductInfo };
+  productosVendidos: { [key: string]: ProductCostInfo };
   totalVentas: number;
   totalCostos: number;
   totalGanancias: number;
 }
 
-export interface ProductInfo {
+export interface ProductCostInfo {
   cantidad: number;
   precioVentaPromedio: number;
   totalVenta: number;
   costoPromedio: number;
   totalCosto: number;
   ganancia: number;
+}
+
+export interface SalesReport {
+  productosVendidos: { [key: string]: ProductSaleInfo };
+  totalIngresos: number;
+  totalProductosVendidos: number;
+}
+
+export interface ProductSaleInfo {
+  cantidad: number;
+  precioVentaPromedio: number;
+  totalVenta: number;
 }

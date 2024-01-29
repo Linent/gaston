@@ -9,12 +9,6 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
 } from "@nextui-org/react";
 import { generalService } from "../../../services";
 import toast from "react-hot-toast";
@@ -29,29 +23,6 @@ interface Props {
 interface ModifiedProduct extends IProduct {
   cantidad: string;
 }
-
-const columns = [
-  {
-    key: "nombre",
-    label: "Nombre del producto",
-  },
-  {
-    key: "existencias",
-    label: "Existencias",
-  },
-  {
-    key: "precio",
-    label: "Precio",
-  },
-  {
-    key: "cantidad",
-    label: "Cantidad",
-  },
-  {
-    key: "id",
-    label: "",
-  },
-];
 
 const CreateMovementsModal: React.FC<Props> = ({
   isOpen,

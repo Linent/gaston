@@ -12,7 +12,11 @@ import { useNavigate } from "react-router-dom";
 import { useGetReports } from "../../hooks";
 import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
 import toast from "react-hot-toast";
-import { CostReportComponent, MovementReport } from "./components";
+import {
+  CostReportComponent,
+  MovementReport,
+  SalesReportComponent,
+} from "./components";
 import { IProduct } from "../../interfaces";
 import { ModalSelectProduct } from "./components/ModalSelectProduct";
 
@@ -207,6 +211,8 @@ export const MovementsManagePage: React.FC = () => {
               <MovementReport movementReport={movementReport} />
             ) : informType?.id === InformTypes.SALES_COST ? (
               <CostReportComponent salesCostReport={salesCostReport} />
+            ) : informType?.id === InformTypes.SALES ? (
+              <SalesReportComponent salesReport={salesReport} />
             ) : null
           ) : null}
         </div>

@@ -7,6 +7,7 @@ import {
   IMovementType,
   IMovementsInform,
   IProduct,
+  SalesReport,
 } from "../interfaces";
 
 interface GetTokenBody {
@@ -104,11 +105,11 @@ class GeneralService extends BackendService {
     });
   }
 
-  async getSalesReport() {
-    return await super.getQuery<{ data: any }>({
+  async getSalesReport(fechaInicio?: string, fechaFin?: string) {
+    return await super.getQuery<{ data: SalesReport }>({
       hasToken: true,
       path: `${BackendRoute.MOVEMENT}/reporteVentas`,
-      params: {productoId: 9}
+      params: { fechaInicio, fechaFin },
     });
   }
 
